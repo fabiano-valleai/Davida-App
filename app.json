@@ -1,0 +1,60 @@
+{
+  "expo": {
+    "name": "Davida-App",
+    "slug": "davida-app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/icons/icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.fabianovalleai.DavidaApp"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.fabianovalleai.DavidaApp",
+      "permissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.MODIFY_AUDIO_SETTINGS"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      [
+        "expo-av",
+        {
+          "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone."
+        }
+      ],
+      [
+        "expo-font",
+        {
+          "fonts": [
+            "./assets/fonts/AveriaSerif-Bold.ttf",
+            "./assets/fonts/AveriaSerif-BoldItalic.ttf",
+            "./assets/fonts/AveriaSerif-Italic.ttf",
+            "./assets/fonts/AveriaSerif-Light.ttf",
+            "./assets/fonts/AveriaSerif-LightItalic.ttf",
+            "./assets/fonts/AveriaSerif-Regular.ttf"
+          ]
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "62060efc-e319-414f-b766-0478d2ad47b5"
+      }
+    },
+    "owner": "fabianovalleai"
+  }
+}
