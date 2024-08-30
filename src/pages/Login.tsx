@@ -1,57 +1,28 @@
-import React, { useState,  } from "react";
+import React, { useContext, useState,  } from "react";
 import { TouchableOpacity } from "react-native";
 import { Image, Text, TextInput, View,  StyleSheet, Dimensions} from "react-native";
-import { useNavigation as useReactNativeNavigation } from "@react-navigation/native";
-import { config } from "config";
+import { useNavigation } from "@react-navigation/native";
 import Snackbar from 'src/components/Snackbar';
+import { AuthContext } from "src/context/auth";
 
 const { width, height } = Dimensions.get("window");
 
 
 export const Login = () => {
-
-  const [ email, setEmail ] = useState<string>("");
-  const [ password, setPassword ] = useState<string>("");
-  const [ isLoading, setLoading ] =  useState<boolean>(false);
-  const [ isVisible, setIsVisible ] = useState<boolean>(false);
-  const [ snackMsg, setSnackMsg ] = useState<string>("");
+  const { submitLogin, user } = useContext(AuthContext);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLoading, setLoading] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+  const [snackMsg, setSnackMsg] = useState("");
   
-  const navigation = useReactNativeNavigation<any>();
+  const navigation = useNavigation<any>();
 
-  const submitLogin = async () => {
-    setLoading(true);
-    try {
-      const response = await fetch(`${config.API_URL}/login`, {
-        method: "POST",
-        body: JSON.stringify({
-          email,
-          password
-        }),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
-
-      const data = await response.json();
-      console.log(response.status)
-      if (response.status === 200) {
-        navigation.navigate("Home");
-        setLoading(false);
-      }
-
-      if ( response.status !== 200 )  {
-        setIsVisible(true);
-        setLoading(false);
-        setSnackMsg("Não foi possível realizar o login, favor confira as credenciais fornecidas.");
-      }
-
-    } catch (error) {
-      setIsVisible(true);
-      setLoading(false);
-      setSnackMsg("Não foi possível realizar o login, favor confira as credenciais fornecidas.");
-    }
+  const handleLogin = () => {
+    submitLogin(email, password, setLoading, setIsVisible, setSnackMsg, navigation.navigate);
   };
-  
+
+  console.log(user)
   return (  
       <View style={styles.mainContainer}>
         <View style={styles.containerLogo}>
@@ -75,7 +46,7 @@ export const Login = () => {
             secureTextEntry={true}
             placeholder="Senha"
           />
-          <TouchableOpacity activeOpacity={0.8} style={styles.loginBtn} onPress={submitLogin}>
+          <TouchableOpacity activeOpacity={0.8} style={styles.loginBtn} onPress={handleLogin}>
             <View>
               <Text style={styles.text}>{ isLoading ? "Carregando..." : "Login"}</Text>
             </View>
