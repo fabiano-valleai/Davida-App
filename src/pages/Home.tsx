@@ -1,23 +1,64 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Text, View, StyleSheet, Dimensions, Image, ScrollView, TouchableOpacity } from "react-native";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { AuthContext } from "src/context/auth";
 import { useNavigation } from "@react-navigation/native";
+import { config } from "config";
 const { width, height } = Dimensions.get("window");
 
 export const Home = () => {
-  const { user } = useContext<any>(AuthContext);
+  const { user, gestationData, jwt } = useContext<any>(AuthContext);
   const navigation = useNavigation<any>();
   const [isOpenMenu, setOpenMenu] = useState<boolean>(false);
+  const [prayers, setPrayers] = useState<string[]>([]);
 
   const getFirstTwoNames = (fullName: string): string => {
     const nameParts = fullName.split(' ');
     return nameParts.slice(0, 2).join(' ');
   };
+  console.log(user.metadata, user)
+  const fetchPrayers = async () => {
+    try {
+      const response = await fetch(`${config.API_URL}/PeriodPrayer`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const cleanedData = data.map(prayer => ({
+          ...prayer,
+          pray: prayer.pray.replace(/(\.\s*|\.\n)/g, '.\n\n') // Adicionar quebra de parágrafo após ponto seguido de espaço ou nova linha
+                            .replace(/([^\.\n])\n/g, '$1')    // Remover quebra de linha onde não é seguido de ponto
+        }));
+        setPrayers(cleanedData);
+      } else {
+        console.error('Failed to fetch prayers:', response.status);
+      }
+    } catch (error) {
+      console.error('Error fetching prayers:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchPrayers();
+  }, []);
+
+  // Função para navegar para a tela de DayDetails
+  const navigateToDayDetails = () => {
+    if (gestationData) {
+      navigation.navigate("DayDetails", { 
+        weekNumber: gestationData.semanaCorrente, 
+        dayNumber: gestationData.diaAtualNaSemana 
+      });
+    }
+  };
 
   return (
     <View style={styles.mainContainer}>
-      {/* Header sempre visível */}
       <View style={styles.header}>
         <View>
           <Ionicons
@@ -49,7 +90,7 @@ export const Home = () => {
           </TouchableOpacity>
           <View style={styles.contentMenu}>
             <View style={{ alignItems: "center", marginTop: 40 }}>
-              <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate("Day")}>
+              <TouchableOpacity style={styles.menuItem} onPress={navigateToDayDetails}>
                 <Ionicons name="calendar-number" size={25} color="#3C5F47" />
                 <Text style={styles.textMenu}>Dia</Text>
               </TouchableOpacity>
@@ -103,20 +144,20 @@ export const Home = () => {
         </View>
         <View style={styles.containerNavigate}>
           <View style={styles.containerIcons}>
-            <TouchableOpacity onPress={() => navigation.navigate("Day")}>
-              <Text>Dia</Text>
+            <TouchableOpacity onPress={navigateToDayDetails}>
+              <Text style={{fontSize: 16, marginBottom: 10}}>Dia</Text>
               <Ionicons name="calendar-number" size={30} color="#3C5F47" />
             </TouchableOpacity>
           </View>
           <View style={styles.containerIcons}>
             <TouchableOpacity style={styles.touchableNavigation} onPress={() => navigation.navigate("Weeks")}>
-              <Text>Semanas</Text>
+              <Text style={{fontSize: 16, marginBottom: 10}}>Semanas</Text>
               <Ionicons name="today" size={30} color="#3C5F47" />
             </TouchableOpacity>
           </View>
           <TouchableOpacity onPress={() => navigation.navigate("Album")}>
             <View style={styles.containerIcons}>
-              <Text>Album</Text>
+              <Text style={{fontSize: 16, marginBottom: 10}}>Album</Text>
               <Ionicons name="albums" size={30} color="#3C5F47" />
             </View>
           </TouchableOpacity>
@@ -124,34 +165,24 @@ export const Home = () => {
         <View style={styles.prays}>
           <Text style={styles.textIdentifier}>Orações</Text>
           <ScrollView style={styles.scrollView}>
-            <View style={styles.containerPray}>
-              <Text>Titulo da oração</Text>
-              <View style={styles.rowPray}>
-                <Text style={styles.pray}>-Pai nosso que está no céus...</Text>
-                <Ionicons style={styles.iconView} name="eye-sharp" size={30} color="#3C5F47" />
-              </View> 
-            </View>
-            <View style={styles.containerPray}>
-              <Text>Titulo da oração</Text>
-              <View style={styles.rowPray}>
-                <Text style={styles.pray}>-Pai nosso que está no céus...</Text>
-                <Ionicons style={styles.iconView} name="eye-sharp" size={30} color="#3C5F47" />
-              </View> 
-            </View>
-            <View style={styles.containerPray}>
-              <Text>Titulo da oração</Text>
-              <View style={styles.rowPray}>
-                <Text style={styles.pray}>-Pai nosso que está no céus...</Text>
-                <Ionicons style={styles.iconView} name="eye-sharp" size={30} color="#3C5F47" />
-              </View> 
-            </View>
-            <View style={styles.containerPray}>
-              <Text>Titulo da oração</Text>
-              <View style={styles.rowPray}>
-                <Text style={styles.pray}>-Pai nosso que está no céus...</Text>
-                <Ionicons style={styles.iconView} name="eye-sharp" size={30} color="#3C5F47" />
-              </View> 
-            </View>
+            {prayers.map(({ pray, title }, index) => {
+              const limitedPray = pray.split(' ').slice(0, 20).join(' ') + '...';
+              return (
+                <View key={index} style={styles.containerPray}>
+                  <Text style={styles.title}>{title}</Text>
+                  <View style={styles.rowPray}>
+                    <Text style={styles.pray}>{limitedPray}</Text>
+                    <Ionicons
+                      style={styles.iconView}
+                      name="eye-sharp"
+                      size={25}
+                      color="#3C5F47"
+                      onPress={() => navigation.navigate("PrayerDetails", { title, pray })} // Navegar para a nova tela com os detalhes
+                    />
+                  </View>
+                </View>
+              );
+            })}
           </ScrollView>
         </View>
       </View>
@@ -169,7 +200,7 @@ const styles = StyleSheet.create({
   header: {
     paddingTop: 20,
     backgroundColor: "#F5e7e7",
-    height: height * 0.12,
+    height: height * 0.10,
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
@@ -188,7 +219,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   logoDavida: {
-    width: width * 0.60,
+    width: width * 0.50,
     alignSelf: "center",
   },
   containerLogo: {
@@ -210,7 +241,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-evenly",
-    height: height * 0.1,
+    height: height * 0.12,
     width: width * 0.9,
     backgroundColor: "#fff",
     borderRadius: 16,
@@ -262,17 +293,19 @@ const styles = StyleSheet.create({
     padding: 15,
     marginTop: 10,
     alignSelf: "flex-start",
-    marginLeft: 10,
+    fontSize: 14
   },
   textIdentifier: {
     fontSize: 16,
     color: "#3C5F47",
-    marginBottom: 15,
+    marginBottom: 20,
+    marginLeft: 10
   },
   containerPray: {
     marginTop: 20,
-    width: width * 0.8,
-    alignSelf: "center",
+    width: width * 0.7,
+    alignSelf: "flex-start",
+    marginLeft: 20
   },
   iconView: {
     marginLeft: 20,
@@ -321,5 +354,8 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     fontSize: 18,
   },
+  title: {
+    fontWeight: "bold",
+    fontSize: 14
+  }
 });
-

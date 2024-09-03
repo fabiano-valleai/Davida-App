@@ -3,7 +3,7 @@ import { Terms } from "./Terms";
 import { Signup } from "./Signup";
 import { Home } from "./Home";
 import { Profile } from "./Profile";
-import { Day } from "./Day";
+import { DayDetails } from "./DayDetails";
 import { Weeks } from "./Weeks";
 import { Album } from "./Album";
 export { 
@@ -12,7 +12,7 @@ export {
     Signup, 
     Home,
     Profile,
-    Day,
+    DayDetails,
     Weeks,
     Album
 }

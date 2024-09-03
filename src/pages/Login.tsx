@@ -9,7 +9,7 @@ const { width, height } = Dimensions.get("window");
 
 
 export const Login = () => {
-  const { submitLogin, user } = useContext(AuthContext);
+  const { submitLogin } = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setLoading] = useState(false);
@@ -22,7 +22,6 @@ export const Login = () => {
     submitLogin(email, password, setLoading, setIsVisible, setSnackMsg, navigation.navigate);
   };
 
-  console.log(user)
   return (  
       <View style={styles.mainContainer}>
         <View style={styles.containerLogo}>

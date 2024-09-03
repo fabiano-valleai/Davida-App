@@ -52,12 +52,7 @@ export const Signup = () => {
         confirmPassword,
         weekPregnancy: weekPregnancyNumber,
       });
-      console.log(JSON.stringify({
-        name: parsedData.fullName,
-        email: parsedData.email,
-        password: parsedData.password,
-        weekPregnancy: parsedData.weekPregnancy,
-      }),)
+      
       const response = await fetch(`${config.API_URL}/user`, {
         method: "POST",
         body: JSON.stringify({
@@ -70,9 +65,10 @@ export const Signup = () => {
           'Content-Type': 'application/json',
         },
       });
-  
+
       const data = await response.json();
-      console.log(response.status)
+      console.log(response)
+
       if (response.status === 200) {
         setIsVisible(true);
         setSnackMsg("Cadastro efetuado com sucesso!");
