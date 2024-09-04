@@ -4,8 +4,21 @@ import { useNavigation as useReactNativeNavigation } from "@react-navigation/nat
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { config } from "config";
 import Snackbar from "src/components/Snackbar";
+import { z } from "zod";
 
 const { width, height } = Dimensions.get("window");
+
+const SignupSchema = z.object({
+  email: z.string().email("Por favor, insira um email válido."),
+  fullName: z.string().min(1, "Nome completo é obrigatório."),
+  password: z.string().min(6, "A senha deve ter no mínimo 6 caracteres."),
+  confirmPassword: z.string(),
+  weekPregnancy: z.number().min(1, "A semana de gravidez deve ser maior ou igual a 1.").max(40, "A semana de gravidez não pode ser maior que 40."),
+}).refine((data) => data.password === data.confirmPassword, {
+  message: "As senhas fornecidas não estão iguais, favor confira e tente novamente.",
+  path: ["confirmPassword"],
+});
+
 
 export const Signup = () => {
 
@@ -16,41 +29,59 @@ export const Signup = () => {
   const [ isVisible, setIsVisible ] = useState<boolean>(false);
   const [ snackMsg, setSnackMsg ] = useState<string>("");
   const navigation = useReactNativeNavigation<any>();
+  const [ weekPregnancy, setWeekPregnancy] = useState<string>();
+
 
   const submitSignup = async () => {
-
-    if (password !== confirmPassword) {
-      setIsVisible(true);
-      setSnackMsg("As senhas fornecidas não estão iguais, favor confira e tente novamente.");
-      return;
-    }
-
     try {
+      // Verifica se weekPregnancy está definido e não é vazio antes de tentar converter
+      const weekPregnancyNumber = weekPregnancy && weekPregnancy.trim() !== "" ? Number(weekPregnancy) : NaN;
+  
+      // Verifica se o valor é um número válido
+      if (isNaN(weekPregnancyNumber)) {
+        setIsVisible(true);
+        setSnackMsg("Por favor, insira uma semana válida de gravidez.");
+        return;
+      }
+  
+      // Fazendo a validação com Zod
+      const parsedData = SignupSchema.parse({
+        email,
+        fullName,
+        password,
+        confirmPassword,
+        weekPregnancy: weekPregnancyNumber,
+      });
+      
       const response = await fetch(`${config.API_URL}/user`, {
         method: "POST",
         body: JSON.stringify({
-          name: fullName,
-          email,
-          password
+          name: parsedData.fullName,
+          email: parsedData.email,
+          password: parsedData.password,
+          weekPregnancy: parsedData.weekPregnancy,
         }),
         headers: {
-          'Content-Type': 'application/json'
-        }
+          'Content-Type': 'application/json',
+        },
       });
-      
+
       const data = await response.json();
-      console.log(data)
-      console.log(response.status)
+      console.log(response)
 
       if (response.status === 200) {
         setIsVisible(true);
         setSnackMsg("Cadastro efetuado com sucesso!");
         navigation.navigate("Login");
       }
-      
-
     } catch (error) {
-    console.error("cai no erro", error)
+      if (error instanceof z.ZodError) {
+        const firstError = error.errors[0];
+        setIsVisible(true);
+        setSnackMsg(firstError.message);
+      } else {
+        console.error("Erro inesperado", error);
+      }
     }
   };
 
@@ -86,6 +117,17 @@ export const Signup = () => {
           value={email}
           style={styles.input}
         />
+          <View style={styles.containerLabel}>
+            <Text>Em qual semana da gravidez você está?</Text>
+            <Text style={styles.required}>*</Text>
+          </View>
+          <TextInput
+             onChangeText={(text) => setWeekPregnancy(text.replace(/[^0-9]/g, ''))}
+            value={weekPregnancy}
+            style={styles.input}
+            placeholder="Ex: 2"
+            keyboardType="numeric"
+          />
         
         <View style={styles.containerLabel}>
           <Text>Senha</Text>

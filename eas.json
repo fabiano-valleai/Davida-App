@@ -1,0 +1,25 @@
+{
+  "cli": {
+    "version": ">= 10.2.1"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal"
+    },
+    "production": {
+      "android": {
+        "buildType": "apk"
+      },
+      "distribution": "store",
+      "releaseChannel": "production",
+      "env": {
+        "EXPO_PUBLIC_API_URL_ANDROID": "https://davida-backend.onrender.com",
+        "EXPO_PUBLIC_API_URL_IOS": "https://davida-backend.onrender.com"
+      }
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}
