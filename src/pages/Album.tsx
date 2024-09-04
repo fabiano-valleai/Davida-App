@@ -62,24 +62,28 @@ export const Album: React.FC = () => {
         resizeMode="contain"
       />
 
-      <View style={{ alignItems: "center", justifyContent: "flex-start", flexDirection: "row", marginLeft: 10 }}>
+      <View style={{ alignItems: "center", justifyContent: "flex-start", flexDirection: "row", marginLeft: 30 }}>
         <Ionicons name="image" style={{ marginRight: 10 }} size={24} />
         <Text style={styles.title}>
           Álbum de fotos
         </Text>
       </View>
       <Divider orientation="horizontal" width={width * 0.003} color="black" />
-      <FlatList
-        data={images}
-        numColumns={2}
-        renderItem={({ item }) => (
-          <View style={styles.imageContainer}>
-            <Image source={{ uri: item.photoUrl }} style={styles.image} />
-          </View>
-        )}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={styles.imageList}
-      />
+      { 
+        images.length === 0 ? <Text style={styles.withoutImages}>Você ainda não possui imagens no seu álbum.</Text> :
+        <FlatList
+          data={images}
+          numColumns={2}
+          renderItem={({ item }) => (
+            <View style={styles.imageContainer}>
+              <Image source={{ uri: item.photoUrl }} style={styles.image} />
+            </View>
+          )}
+          keyExtractor={(item) => item.id}
+          contentContainerStyle={styles.imageList}
+        />
+
+      }
     </View>
   );
 };
@@ -121,22 +125,12 @@ const styles = StyleSheet.create({
     height: (width / 2) - 30,
     borderRadius: 10,
   },
-  uploadButton: {
-    backgroundColor: "#CF6C6E",
-    padding: 15,
-    borderRadius: 10,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 100,
-    width: width * 0.5,
+  withoutImages: {
     alignSelf: "center",
-  },
-  uploadButtonText: {
-    fontSize: 16,
-    color: "#fff",
-    marginLeft: 10,
-  },
+    marginTop: 200,
+    alignItems: "center",
+    fontSize: 16
+  }
 });
 
 export default Album;

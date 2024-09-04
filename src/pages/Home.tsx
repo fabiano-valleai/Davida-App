@@ -31,8 +31,8 @@ export const Home = () => {
         const data = await response.json();
         const cleanedData = data.map(prayer => ({
           ...prayer,
-          pray: prayer.pray.replace(/(\.\s*|\.\n)/g, '.\n\n') // Adicionar quebra de parágrafo após ponto seguido de espaço ou nova linha
-                            .replace(/([^\.\n])\n/g, '$1')    // Remover quebra de linha onde não é seguido de ponto
+          pray: prayer.pray.replace(/(\.\s*|\.\n)/g, '.\n\n')
+                            .replace(/([^\.\n])\n/g, '$1')
         }));
         setPrayers(cleanedData);
       } else {
@@ -56,7 +56,7 @@ export const Home = () => {
       });
     }
   };
-
+  console.log(jwt)
   return (
     <View style={styles.mainContainer}>
       <View style={styles.header}>
@@ -165,21 +165,22 @@ export const Home = () => {
         <View style={styles.prays}>
           <Text style={styles.textIdentifier}>Orações</Text>
           <ScrollView style={styles.scrollView}>
-            {prayers.map(({ pray, title }, index) => {
+            {prayers.map(({ pray, title } : any, index) => {
               const limitedPray = pray.split(' ').slice(0, 20).join(' ') + '...';
               return (
                 <View key={index} style={styles.containerPray}>
                   <Text style={styles.title}>{title}</Text>
-                  <View style={styles.rowPray}>
-                    <Text style={styles.pray}>{limitedPray}</Text>
-                    <Ionicons
-                      style={styles.iconView}
-                      name="eye-sharp"
-                      size={25}
-                      color="#3C5F47"
-                      onPress={() => navigation.navigate("PrayerDetails", { title, pray })} // Navegar para a nova tela com os detalhes
-                    />
-                  </View>
+                  <TouchableOpacity  onPress={() => navigation.navigate("PrayerDetails", { title, pray })}>
+                    <View style={styles.rowPray}>
+                      <Text style={styles.pray}>{limitedPray}</Text>
+                      <Ionicons
+                        style={styles.iconView}
+                        name="eye-sharp"
+                        size={25}
+                        color="#3C5F47"
+                      />
+                    </View>
+                  </TouchableOpacity>
                 </View>
               );
             })}

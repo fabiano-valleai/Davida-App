@@ -10,14 +10,15 @@ import { config } from "config";
 const { width, height } = Dimensions.get("window");
 
 export const Profile = () => {
-  const { user, jwt } = useContext<any>(AuthContext);
+  const { user, jwt, gestationData } = useContext<any>(AuthContext);
   const [name, setName] = useState<string>(user.name);
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [snackMsg, setSnackMsg] = useState<string>("");
-  const [profilePicture, setProfilePicture] = useState<string | null>(null);
-  const [babyName, setBabyName] = useState<string>("");
-  const [fatherName, setFatherName] = useState<string>("");
+  const [profilePicture, setProfilePicture] = useState<string | null>(user.profilePictureUrl ? user.profilePictureUrl : null);
+  const [babyName, setBabyName] = useState<string>(user.metadata.babyName ? user.metadata.babyName : "" );
+  const [fatherName, setFatherName] = useState<string>(user.metadata.fatherName ? user.metadata.fatherName : "");
   const navigation = useNavigation<any>();
+
 
   const getFirstName = (fullName: string): string => {
     const nameParts = fullName.split(' ');
@@ -44,38 +45,47 @@ export const Profile = () => {
     }
   }; 
 
-  
   const submitEditProfile = async () => {
     try {
+      const formData = new FormData();
+      formData.append('name', name);
+      formData.append('fatherName', fatherName);
+      formData.append('babyName', babyName);
+      formData.append('userId', user.metadata.userId);
+      formData.append('gestationPeriod', gestationData.semanaCorrente);
+  
+      if (profilePicture) {
+        formData.append('profilePicture', {
+          uri: profilePicture,
+          name: 'profile.jpg',
+          type: 'image/jpeg'
+        });
+      }
+  
       const response = await fetch(`${config.API_URL}/metadata`, {
-        method: "POST",
-        body: JSON.stringify({
-          name: name,
-          fatherName,
-          babyName,
-          userId: user.metadata.userId,
-          profilePicture
-        }),
+        method: "PUT",
+        body: formData,
         headers: {
-          'Content-Type': 'application/json',
           'Authorization': `Bearer ${jwt}`
         }
       });
+  
       const data = await response.json();
 
       if (response.status === 200) {
         setIsVisible(true);
-        setSnackMsg("Perfil editado com sucesso!")
+        setSnackMsg("Perfil editado com sucesso!");
       } else {
         setIsVisible(true);
-        setSnackMsg("Não foi possivel editar seu perfil, favor verificar o preenchimento dos campos.");
+        setSnackMsg("Não foi possível editar seu perfil, favor verificar o preenchimento dos campos.");
       }
-
+  
     } catch (error) {
       setIsVisible(true);
-      setSnackMsg("Não foi possivel editar seu perfil, favor verificar o preenchimento dos campos.");
+      setSnackMsg("Não foi possível editar seu perfil, favor verificar o preenchimento dos campos.");
     }
   };
+  
 
 
   return (
@@ -150,6 +160,7 @@ const styles = StyleSheet.create({
   mainContainer: {
     backgroundColor: "white", // Same background color as the example image
     padding: 20,
+    height: height * 1.0
   },
   backButton: {
     marginBottom: 20,

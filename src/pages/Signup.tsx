@@ -5,6 +5,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { config } from "config";
 import Snackbar from "src/components/Snackbar";
 import { z } from "zod";
+import Divider from "src/components/Divider";
 
 const { width, height } = Dimensions.get("window");
 
@@ -96,6 +97,7 @@ export const Signup = () => {
           <Ionicons name="person-add" size={20} color="black" />
           <Text style={ styles.message}>Cadastro</Text>
         </View>
+        <Divider orientation="horizontal" width={width * 0.001} color="black"></Divider>
       </View>
       <View style={styles.containerInputs}>
         <View style={styles.containerLabel}>
@@ -150,6 +152,13 @@ export const Signup = () => {
           style={styles.input}
         
         />
+        <View style={styles.termsContainer}>
+          <Text style={styles.terms}>
+            Ao registrar você concorda com os
+            <Text onPress={() => navigation.navigate("Terms")} style={styles.termsText}> Termos </Text> 
+            de uso do aplicativo.
+          </Text>
+        </View>
         <TouchableOpacity activeOpacity={0.8} style={styles.loginBtn} onPress={submitSignup}>
           <View>
             <Text style={styles.text}>Registrar</Text>
@@ -162,7 +171,7 @@ export const Signup = () => {
         isVisible={isVisible}
         duration={3000} 
         position="bottom" 
-        backgroundColor="#CF6D6E"
+        backgroundColor={ snackMsg === "Cadastro efetuado com sucesso!" ? "green" : "#CF6D6E"}
         textColor="white"
         actionTextColor="white"
         containerStyle={{ marginHorizontal: 8 }}
@@ -182,7 +191,7 @@ const styles = StyleSheet.create({
     width: width * 0.4,
   },
   containerLogo: {
-    height: height * 0.3,
+    height: height * 0.22,
     justifyContent: "center",
     alignItems: "center",
     width: width * 1.0,
@@ -191,7 +200,8 @@ const styles = StyleSheet.create({
     color: "#3C5F47",
     fontSize: 20,
     textAlign: "center",
-    marginLeft: 10
+    marginLeft: 10,
+    fontWeight: "bold"
   },
   input: {
     borderWidth: 0.1,
@@ -203,7 +213,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   containerInputs: {
-    marginTop: 20,
+    marginTop: 40,
     justifyContent: "center",
     alignItems: "center"
   },
@@ -241,6 +251,20 @@ const styles = StyleSheet.create({
     width: width * 0.8,
     justifyContent: "flex-start",
     alignItems: "center",
-    marginTop: 20
+    marginTop: 20,
+    marginBottom: 10
+  },
+  termsText: {
+    fontSize: 14,
+    fontWeight: "bold",
+    color: "#CF6D6E"
+  },
+  terms: {
+    fontSize: 14,
+  },
+  termsContainer: {
+    textAlign: "center",
+    width: width * 0.85,
+    marginBottom: 20
   }
 })
