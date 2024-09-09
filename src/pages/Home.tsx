@@ -16,7 +16,7 @@ export const Home = () => {
     const nameParts = fullName.split(' ');
     return nameParts.slice(0, 2).join(' ');
   };
-  console.log(user.metadata, user)
+  console.log(gestationData)
   const fetchPrayers = async () => {
     try {
       const response = await fetch(`${config.API_URL}/PeriodPrayer`, {
@@ -29,7 +29,7 @@ export const Home = () => {
 
       if (response.ok) {
         const data = await response.json();
-        const cleanedData = data.map(prayer => ({
+        const cleanedData = data.map((prayer : any) => ({
           ...prayer,
           pray: prayer.pray.replace(/(\.\s*|\.\n)/g, '.\n\n')
                             .replace(/([^\.\n])\n/g, '$1')
@@ -46,17 +46,17 @@ export const Home = () => {
   useEffect(() => {
     fetchPrayers();
   }, []);
-
   // Função para navegar para a tela de DayDetails
   const navigateToDayDetails = () => {
     if (gestationData) {
       navigation.navigate("DayDetails", { 
-        weekNumber: gestationData.semanaCorrente, 
-        dayNumber: gestationData.diaAtualNaSemana 
+        selectedWeek: gestationData.semanaCorrente,  // Altere de weekNumber para selectedWeek
+        selectedDay: gestationData.diaAtual          // Altere de dayNumber para selectedDay
       });
     }
   };
-  console.log(jwt)
+  
+  console.log(gestationData)
   return (
     <View style={styles.mainContainer}>
       <View style={styles.header}>
@@ -96,7 +96,7 @@ export const Home = () => {
               </TouchableOpacity>
             </View>
             <View style={{ alignItems: "center", marginTop: 10 }}>
-              <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate("Weeks")}>
+              <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate("WeekSelectionScreen")}>
                 <Ionicons name="today" size={25} color="#3C5F47" />
                 <Text style={styles.textMenu}>Semana</Text>
               </TouchableOpacity>
@@ -150,7 +150,7 @@ export const Home = () => {
             </TouchableOpacity>
           </View>
           <View style={styles.containerIcons}>
-            <TouchableOpacity style={styles.touchableNavigation} onPress={() => navigation.navigate("Weeks")}>
+            <TouchableOpacity style={styles.touchableNavigation} onPress={() => navigation.navigate("WeekSelectionScreen")}>
               <Text style={{fontSize: 16, marginBottom: 10}}>Semanas</Text>
               <Ionicons name="today" size={30} color="#3C5F47" />
             </TouchableOpacity>

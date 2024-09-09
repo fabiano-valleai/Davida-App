@@ -4,8 +4,9 @@ import { Signup } from "./Signup";
 import { Home } from "./Home";
 import { Profile } from "./Profile";
 import { DayDetails } from "./DayDetails";
-import { Weeks } from "./Weeks";
+import { WeekSelectionScreen } from "./WeekSelectionScreen";
 import { Album } from "./Album";
+import ForgotPasswordScreen from "./ResetPassword";
 export { 
     Login,
     Terms,
@@ -13,6 +14,7 @@ export {
     Home,
     Profile,
     DayDetails,
-    Weeks,
-    Album
+    WeekSelectionScreen,
+    Album,
+    ForgotPasswordScreen
 }
