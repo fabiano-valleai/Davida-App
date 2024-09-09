@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 
 const Snackbar = ({
@@ -15,8 +15,7 @@ const Snackbar = ({
   actionTextColor,
   isVisible,
   setIsVisible,
-} : any) => {
-
+}: any) => {
   useEffect(() => {
     if (isVisible) {
       const timeout = setTimeout(() => {

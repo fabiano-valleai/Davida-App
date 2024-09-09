@@ -1,6 +1,13 @@
 import React from "react";
-import { View, Text, StyleSheet, Dimensions, Image, ScrollView } from "react-native";
-import Ionicons from '@expo/vector-icons/Ionicons';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Dimensions,
+  Image,
+  ScrollView,
+} from "react-native";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 const { width, height } = Dimensions.get("window");
 
@@ -48,7 +55,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
-    width: width
+    width: width,
   },
   logo: {
     width: width * 0.4,
@@ -69,7 +76,7 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
     elevation: 5,
     flex: 1, // Allows the container to take the remaining space
-    marginBottom: 20
+    marginBottom: 20,
   },
   titleContainer: {
     flexDirection: "row",

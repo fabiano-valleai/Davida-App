@@ -7,14 +7,17 @@ import { DayDetails } from "./DayDetails";
 import { WeekSelectionScreen } from "./WeekSelectionScreen";
 import { Album } from "./Album";
 import ForgotPasswordScreen from "./ResetPassword";
-export { 
-    Login,
-    Terms,
-    Signup, 
-    Home,
-    Profile,
-    DayDetails,
-    WeekSelectionScreen,
-    Album,
-    ForgotPasswordScreen
-}
+import { CheckoutScreen } from "./CheckoutScreen";
+
+export {
+  Login,
+  Terms,
+  Signup,
+  Home,
+  Profile,
+  DayDetails,
+  WeekSelectionScreen,
+  Album,
+    ForgotPasswordScreen,
+  CheckoutScreen,
+};

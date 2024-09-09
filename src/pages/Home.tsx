@@ -1,6 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Text, View, StyleSheet, Dimensions, Image, ScrollView, TouchableOpacity } from "react-native";
-import Ionicons from '@expo/vector-icons/Ionicons';
+import {
+  Text,
+  View,
+  StyleSheet,
+  Dimensions,
+  Image,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { AuthContext } from "src/context/auth";
 import { useNavigation } from "@react-navigation/native";
 import { config } from "config";
@@ -13,17 +21,17 @@ export const Home = () => {
   const [prayers, setPrayers] = useState<string[]>([]);
 
   const getFirstTwoNames = (fullName: string): string => {
-    const nameParts = fullName.split(' ');
-    return nameParts.slice(0, 2).join(' ');
+    const nameParts = fullName.split(" ");
+    return nameParts.slice(0, 2).join(" ");
   };
   console.log(gestationData)
   const fetchPrayers = async () => {
     try {
       const response = await fetch(`${config.API_URL}/PeriodPrayer`, {
-        method: 'GET',
+        method: "GET",
         headers: {
           Authorization: `Bearer ${jwt}`,
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       });
 
@@ -36,10 +44,10 @@ export const Home = () => {
         }));
         setPrayers(cleanedData);
       } else {
-        console.error('Failed to fetch prayers:', response.status);
+        console.error("Failed to fetch prayers:", response.status);
       }
     } catch (error) {
-      console.error('Error fetching prayers:', error);
+      console.error("Error fetching prayers:", error);
     }
   };
 
@@ -70,15 +78,25 @@ export const Home = () => {
         </View>
         <View style={styles.welcome}>
           <Text style={styles.welcomeText}>Seja bem vinda,</Text>
-          <Text style={styles.userName}>{`${getFirstTwoNames(user.name)}!`}</Text>
+          <Text
+            style={styles.userName}
+          >{`${getFirstTwoNames(user.name)}!`}</Text>
         </View>
         <View>
-          <Ionicons name="person" size={24} color="#3C5F47" onPress={() => navigation.navigate("Profile")} />
+          <Ionicons
+            name="person"
+            size={24}
+            color="#3C5F47"
+            onPress={() => navigation.navigate("Profile")}
+          />
         </View>
       </View>
 
       {isOpenMenu && (
-        <TouchableOpacity style={styles.opacityBackground} onPress={() => setOpenMenu(false)}>
+        <TouchableOpacity
+          style={styles.opacityBackground}
+          onPress={() => setOpenMenu(false)}
+        >
           <View />
         </TouchableOpacity>
       )}
@@ -90,7 +108,10 @@ export const Home = () => {
           </TouchableOpacity>
           <View style={styles.contentMenu}>
             <View style={{ alignItems: "center", marginTop: 40 }}>
-              <TouchableOpacity style={styles.menuItem} onPress={navigateToDayDetails}>
+              <TouchableOpacity
+                style={styles.menuItem}
+                onPress={navigateToDayDetails}
+              >
                 <Ionicons name="calendar-number" size={25} color="#3C5F47" />
                 <Text style={styles.textMenu}>Dia</Text>
               </TouchableOpacity>
@@ -102,25 +123,37 @@ export const Home = () => {
               </TouchableOpacity>
             </View>
             <View style={{ alignItems: "center" }}>
-              <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate("Subscription")}>
+              <TouchableOpacity
+                style={styles.menuItem}
+                onPress={() => navigation.navigate("CheckoutScreen")}
+              >
                 <Ionicons name="cart" size={25} color="#3C5F47" />
                 <Text style={styles.textMenu}>Pagamento</Text>
               </TouchableOpacity>
             </View>
             <View style={{ alignItems: "center" }}>
-              <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate("Profile")}>
+              <TouchableOpacity
+                style={styles.menuItem}
+                onPress={() => navigation.navigate("Profile")}
+              >
                 <Ionicons name="person" size={25} color="#3C5F47" />
                 <Text style={styles.textMenu}>Perfil</Text>
               </TouchableOpacity>
             </View>
             <View style={{ alignItems: "center" }}>
-              <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate("Album")}>
+              <TouchableOpacity
+                style={styles.menuItem}
+                onPress={() => navigation.navigate("Album")}
+              >
                 <Ionicons name="albums" size={25} color="#3C5F47" />
                 <Text style={styles.textMenu}>Album</Text>
               </TouchableOpacity>
             </View>
             <View>
-              <TouchableOpacity style={styles.menuLogout} onPress={() => navigation.navigate("Login")}>
+              <TouchableOpacity
+                style={styles.menuLogout}
+                onPress={() => navigation.navigate("Login")}
+              >
                 <Ionicons name="log-out" size={25} color="#3C5F47" />
                 <Text style={styles.textMenu}>Sair</Text>
               </TouchableOpacity>
@@ -137,7 +170,9 @@ export const Home = () => {
               resizeMode="contain"
             />
             <View>
-              <Text style={styles.message}>"Porque os filhos são um dom de Deus."</Text>
+              <Text style={styles.message}>
+                "Porque os filhos são um dom de Deus."
+              </Text>
               <Text style={styles.citation}>(Sl 126, 3)</Text>
             </View>
           </View>
@@ -145,7 +180,7 @@ export const Home = () => {
         <View style={styles.containerNavigate}>
           <View style={styles.containerIcons}>
             <TouchableOpacity onPress={navigateToDayDetails}>
-              <Text style={{fontSize: 16, marginBottom: 10}}>Dia</Text>
+              <Text style={{ fontSize: 16, marginBottom: 10 }}>Dia</Text>
               <Ionicons name="calendar-number" size={30} color="#3C5F47" />
             </TouchableOpacity>
           </View>
@@ -157,7 +192,7 @@ export const Home = () => {
           </View>
           <TouchableOpacity onPress={() => navigation.navigate("Album")}>
             <View style={styles.containerIcons}>
-              <Text style={{fontSize: 16, marginBottom: 10}}>Album</Text>
+              <Text style={{ fontSize: 16, marginBottom: 10 }}>Album</Text>
               <Ionicons name="albums" size={30} color="#3C5F47" />
             </View>
           </TouchableOpacity>
@@ -201,7 +236,7 @@ const styles = StyleSheet.create({
   header: {
     paddingTop: 20,
     backgroundColor: "#F5e7e7",
-    height: height * 0.10,
+    height: height * 0.1,
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
@@ -220,11 +255,11 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   logoDavida: {
-    width: width * 0.50,
+    width: width * 0.5,
     alignSelf: "center",
   },
   containerLogo: {
-    height: height * 0.20,
+    height: height * 0.2,
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 60,
@@ -254,7 +289,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.6,
     shadowRadius: 10,
     elevation: 5,
-    alignSelf: 'center',
+    alignSelf: "center",
     fontSize: 20,
   },
   containerIcons: {
@@ -274,7 +309,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.6,
     shadowRadius: 10,
     elevation: 5,
-    alignSelf: 'center',
+    alignSelf: "center",
     fontSize: 20,
     width: width * 0.9,
   },
@@ -294,19 +329,19 @@ const styles = StyleSheet.create({
     padding: 15,
     marginTop: 10,
     alignSelf: "flex-start",
-    fontSize: 14
+    fontSize: 14,
   },
   textIdentifier: {
     fontSize: 16,
     color: "#3C5F47",
     marginBottom: 20,
-    marginLeft: 10
+    marginLeft: 10,
   },
   containerPray: {
     marginTop: 20,
     width: width * 0.7,
     alignSelf: "flex-start",
-    marginLeft: 20
+    marginLeft: 20,
   },
   iconView: {
     marginLeft: 20,
@@ -317,21 +352,21 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   opacityBackground: {
-    position: 'absolute',
+    position: "absolute",
     width: width,
     height: height,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
     zIndex: 1,
   },
   menu: {
-    position: 'absolute',
-    width: width * 0.50,
+    position: "absolute",
+    width: width * 0.5,
     height: height,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     zIndex: 2,
     padding: 20,
     borderRightWidth: 1,
-    borderRightColor: '#ccc',
+    borderRightColor: "#ccc",
   },
   mainContent: {
     flex: 1,
@@ -341,7 +376,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     marginTop: 20,
     alignItems: "center",
-    width: width * 0.40,
+    width: width * 0.4,
   },
   menuLogout: {
     flexDirection: "row",
@@ -357,6 +392,6 @@ const styles = StyleSheet.create({
   },
   title: {
     fontWeight: "bold",
-    fontSize: 14
-  }
+    fontSize: 14,
+  },
 });

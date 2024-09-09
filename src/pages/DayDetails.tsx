@@ -1,6 +1,16 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity, Dimensions, Image, ActivityIndicator } from "react-native";
-import Ionicons from '@expo/vector-icons/Ionicons';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TextInput,
+  TouchableOpacity,
+  Dimensions,
+  Image,
+  ActivityIndicator,
+} from "react-native";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { AuthContext } from "src/context/auth";
 import { config } from "config";
 import { useNavigation, useRoute } from "@react-navigation/native";  
@@ -195,7 +205,9 @@ useEffect(() => {
       </View>
 
       <View style={styles.sectionContainer}>
-        <Text style={styles.consecrationTitle}>CONSAGRAÇÃO À NOSSA SENHORA</Text>
+        <Text style={styles.consecrationTitle}>
+          CONSAGRAÇÃO À NOSSA SENHORA
+        </Text>
         <View style={styles.consecrationContainer}>
           <Text style={styles.prayerText}>{dayInfo?.consecration}</Text>
         </View>
@@ -234,7 +246,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    width: width * 1.0
+    width: width * 1.0,
   },
   loadingContainer: {
     flex: 1,
@@ -248,7 +260,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
-    width: width * 1.0
+    width: width * 1.0,
   },
   logoDavida: {
     width: width * 0.3,
