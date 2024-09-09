@@ -3,29 +3,43 @@ import { View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity, Dimens
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { AuthContext } from "src/context/auth";
 import { config } from "config";
-import { useNavigation } from "@react-navigation/native";
-import Divider from "src/components/Divider";
+import { useNavigation, useRoute } from "@react-navigation/native";  
 import Snackbar from "src/components/Snackbar";
 
 const { width, height } = Dimensions.get('window');
 
 // Função para obter o nome do dia da semana em português
-const getWeekday = () => {
-  const options = { weekday: 'long' };
-  const today = new Date();
-  return new Intl.DateTimeFormat('pt-BR', options).format(today);
-};
 
 export const DayDetails = () => {
   const { gestationData, jwt, user } = useContext<any>(AuthContext);
   const navigation = useNavigation<any>();
+  const route = useRoute<any>();  
+
+  // Verifica se é um dia selecionado manualmente ou o dia atual da gestação
+  const selectedDay = route.params?.selectedDay || gestationData.diaCorrente;
+  const selectedWeek = route.params?.selectedWeek || gestationData.semanaCorrente;
+
+  const absoluteDay = (selectedWeek - 1) * 7 + selectedDay;
+
   const [dayInfo, setDayInfo] = useState<any>(null);
-  const [note, setNote] = useState<string>("");
+  const [note, setNote] = useState<string>(""); 
   const [isVisible, setIsVisible] = useState(false);
   const [snackMsg, setSnackMsg] = useState("");
+  const [loading, setLoading] = useState(true);  // Adicionado estado de carregamento
 
-  const fetchDayInfo = async (weekNumber: number) => {
+  // Função que busca as informações do dia selecionado
+  const fetchDayInfo = async (dayNumber?: number, selectedWeek?: number, selectedDay?: number) => {
     try {
+      let weekNumber = selectedWeek;  // Variável para armazenar o número da semana
+  
+      // Se `selectedWeek` e `selectedDay` não forem passados, calcule a partir do dia absoluto
+      if (!selectedWeek || !selectedDay) {
+        weekNumber = Math.ceil(dayNumber / 7);  // Calcula a semana a partir do `dayNumber`
+        selectedDay = dayNumber % 7 === 0 ? 7 : dayNumber % 7;  // Calcula o dia dentro da semana
+      }
+      console.log(`${config.API_URL}/week-all?weekNumber=${weekNumber}`)
+      console.log(jwt)
+      // Requisição para obter informações da semana
       const response = await fetch(`${config.API_URL}/week-all?weekNumber=${weekNumber}`, {
         method: 'GET',
         headers: {
@@ -33,16 +47,30 @@ export const DayDetails = () => {
           'Content-Type': 'application/json',
         },
       });
+  
       const data = await response.json();
-      const dayDetails = data[0].days.find((day: any) => day.dayNumber === gestationData.diaAtual);
-      setDayInfo(dayDetails);
+      // console.log(data[0].days, weekNumber)
+      // Encontre o dia correto dentro da semana
+      const dayDetails = data[0]?.days.find((day: any) => day.dayNumber === selectedDay);
+      
+      if (dayDetails) {
+        setDayInfo(dayDetails);  // Atualiza as informações do dia
+      } else {
+        console.error("Dia não encontrado para os parâmetros fornecidos.");
+      }
     } catch (error) {
       console.error("Error fetching day info:", error);
+    } finally {
+      setLoading(false);  // Finaliza o estado de carregamento
     }
   };
+  
 
-  const fetchCurrentDayAnnotation = async () => {
+  // Função para buscar a anotação do dia
+  const fetchCurrentDayAnnotation = async (dayNumber: number) => {
     try {
+      const weekNumber = Math.ceil(dayNumber / 7);
+
       const response = await fetch(`${config.API_URL}/PregnantDay?userId=${user.metadata.userId}`, {
         method: 'GET',
         headers: {
@@ -52,13 +80,11 @@ export const DayDetails = () => {
       });
       
       const data = await response.json();
-  
       const currentAnnotation = data.find(
         (annotation: any) =>
-          annotation.day === gestationData.diaAtual &&
-          annotation.weekNumber === gestationData.semanaCorrente
+          annotation.day === dayNumber && annotation.weekNumber === weekNumber
       );
-  
+
       if (currentAnnotation) {
         setNote(currentAnnotation.annotation);  // Atualiza a anotação no campo de texto
       } else {
@@ -69,15 +95,17 @@ export const DayDetails = () => {
     }
   };
 
+  // Função para submeter a anotação
   const submitAnotation = async () => {
     try {
+      const weekNumber = Math.ceil(absoluteDay / 7);
       const response = await fetch(`${config.API_URL}/PregnantDay`, {
         method: "POST",
         body: JSON.stringify({
           annotation: note,
           userId: user.metadata.userId,
-          day: gestationData.diaAtual,
-          weekNumber: gestationData.semanaCorrente
+          day: absoluteDay,
+          weekNumber: weekNumber
         }),
         headers: {
           Authorization: `Bearer ${jwt}`,
@@ -86,26 +114,40 @@ export const DayDetails = () => {
       });
       const data = await response.json();
       if (response.status === 200) {
-        setSnackMsg("Salvo com sucesso!")
-        setIsVisible(true)
-        fetchCurrentDayAnnotation(); // Recarrega as anotações após salvar
+        setSnackMsg("Salvo com sucesso!");
+        setIsVisible(true);
+        fetchCurrentDayAnnotation(absoluteDay); // Recarrega as anotações após salvar
       } else {
-        setIsVisible(true)
-        setSnackMsg("Não foi possível salvar sua edição, tente novamente mais tarde.")
+        setIsVisible(true);
+        setSnackMsg("Não foi possível salvar sua edição, tente novamente mais tarde.");
       }
     } catch (error) {
-      setIsVisible(true)
-      setSnackMsg("Não foi possível salvar sua edição, tente novamente mais tarde.")
+      setIsVisible(true);
+      setSnackMsg("Não foi possível salvar sua edição, tente novamente mais tarde.");
       console.error("Error submitting annotation:", error);
     }
   };
 
-  useEffect(() => {
-    fetchDayInfo(gestationData.semanaCorrente);
-    fetchCurrentDayAnnotation();
-  }, [gestationData]);
+ // Efeito para carregar os dados do dia e anotação
+useEffect(() => {
+  let absoluteDay;
 
-  if (!dayInfo) {
+  // Se `selectedWeek` e `selectedDay` forem fornecidos pela navegação, use-os
+  if (selectedWeek && selectedDay) {
+    absoluteDay = (selectedWeek - 1) * 7 + selectedDay;  // Calcula o dia absoluto a partir da semana e dia selecionados
+  } else {
+    // Caso contrário, use o dia e semana atuais da gestação
+    absoluteDay = (gestationData.semanaCorrente - 1) * 7 + gestationData.diaAtual;
+  }
+
+  // Busca as informações do dia e a anotação
+  fetchDayInfo(absoluteDay);
+  fetchCurrentDayAnnotation(absoluteDay);
+  
+}, [selectedWeek, selectedDay, gestationData]);  // Efeito depende de `selectedWeek`, `selectedDay` e `gestationData`
+
+
+  if (loading) {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#3C5F47" />
@@ -113,75 +155,64 @@ export const DayDetails = () => {
     ); 
   }
 
+  if (!dayInfo) {
+    return (
+      <View style={styles.errorContainer}>
+        <Text>Não foi possível carregar as informações do dia.</Text>
+      </View>
+    );
+  }
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
-        <View>
-          <Ionicons
-            name="arrow-back"
-            size={30}
-            color="#3C5F47"
-            onPress={() => navigation.navigate("Home")} 
-          />
-        </View>
-        <View>
-          <Image
-            source={require("assets/logos/logoDavida.png")}
-            style={styles.logoDavida}
-            resizeMode="contain"
-          />
-        </View>
-        <View>
-          <Ionicons name="person" size={24} color="#3C5F47" onPress={() => navigation.navigate("Profile")} />
-        </View>
-      </View>
-
-      <View style={styles.sectionHeader}>
-        <View style={styles.titlePage}>
-          <Text style={styles.headerTitle}>
-            Dia {`${gestationData.diaAtual + gestationData.semanaCorrente * 7} - ${getWeekday().toLocaleUpperCase()}`}
-          </Text>
-        </View>
-        <View style={styles.dividerStyle}>
-          <Divider orientation="horizontal" width={width * 0.002} color="#CF6C6E"></Divider>
-        </View>
+        <Ionicons
+          name="arrow-back"
+          size={30}
+          color="#3C5F47"
+          onPress={() => navigation.goBack()} 
+        />
+        <Image
+          source={require("assets/logos/logoDavida.png")}
+          style={styles.logoDavida}
+          resizeMode="contain"
+        />
+        <Ionicons name="person" size={24} color="#3C5F47" onPress={() => navigation.navigate("Profile")} />
       </View>
 
       <View style={styles.sectionContainer}>
         <Text style={styles.verseTitle}>VERSÍCULO DO DIA</Text>
         <View style={styles.verseContainer}>
-          <Text style={styles.verseText}>{dayInfo.Verse[0].text}</Text>
+          <Text style={styles.verseText}>{dayInfo?.Verse[0]?.text}</Text>
         </View>
       </View>
 
       <View style={styles.sectionContainer}>
         <Text style={styles.prayTitle}>ORAÇÃO DO DIA</Text>
         <View style={styles.prayerContainer}>
-          <Text style={styles.prayerText}>{dayInfo.pray}</Text>
+          <Text style={styles.prayerText}>{dayInfo?.pray}</Text>
         </View>
       </View>
 
       <View style={styles.sectionContainer}>
         <Text style={styles.consecrationTitle}>CONSAGRAÇÃO À NOSSA SENHORA</Text>
         <View style={styles.consecrationContainer}>
-          <Text style={styles.prayerText}>{dayInfo.consecration}</Text>
+          <Text style={styles.prayerText}>{dayInfo?.consecration}</Text>
         </View>
       </View>
 
       <View style={styles.noteContainer}>
         <Text style={styles.sectionTitle}>Anotação do Dia</Text>
-        <View>
-          <TextInput
-            style={styles.textInput}
-            value={note}
-            onChangeText={setNote}
-            placeholder="Escreva sua anotação aqui..."
-            multiline
-          />
-        </View>
+        <TextInput
+          style={styles.textInput}
+          value={note}
+          onChangeText={setNote}
+          placeholder="Ex: Como estou feliz com a sua vinda. Mamãe queria muito te beijar agora."
+          multiline
+        />
       </View>
 
-      <TouchableOpacity style={styles.saveButton} onPress={ submitAnotation }>
+      <TouchableOpacity style={styles.saveButton} onPress={submitAnotation}>
         <Text style={styles.saveButtonText}>Salvar</Text>
       </TouchableOpacity>
 
@@ -193,10 +224,7 @@ export const DayDetails = () => {
         position="bottom" 
         backgroundColor={snackMsg === "Salvo com sucesso!" ? "green" : "#CF6C6E"}
         textColor="white"
-        actionTextColor="white"
         containerStyle={{ marginHorizontal: 8 }}
-        messageStyle={{ }}
-        actionTextStyle={{ }}
       />
     </ScrollView>
   );
@@ -252,6 +280,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   sectionContainer: {
+    marginTop: 20,
     marginBottom: 30,
     justifyContent: "flex-start",
     width: width * 0.85,

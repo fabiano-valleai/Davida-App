@@ -51,7 +51,7 @@ export const Login = () => {
             </View>
           </TouchableOpacity>
           <View style={styles.hrefs}>
-              <Text style={styles.message2}>Esqueceu sua senha?</Text>
+              <Text style={styles.message2}  onPress={ () => navigation.navigate("ResetPassword")}>Esqueceu sua senha?</Text>
               <Text style={styles.message3} onPress={ () => navigation.navigate("Signup")}>Cadastre-se</Text>
           </View>
         </View>

@@ -9,7 +9,10 @@
     },
     "production": {
       "android": {
-        "buildType": "apk"
+        "buildType": "app-bundle"
+      },
+      "ios": {
+
       },
       "distribution": "store",
       "releaseChannel": "production",

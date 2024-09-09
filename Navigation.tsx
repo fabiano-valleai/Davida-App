@@ -4,7 +4,7 @@ import {
   createNativeStackNavigator,
 } from "@react-navigation/native-stack";
 import React from "react";
-import { Home, Login, Signup, Terms, Profile, Weeks, Album, DayDetails } from "src/pages";
+import { Home, Login, Signup, Terms, Profile, Album, DayDetails, WeekSelectionScreen, ForgotPasswordScreen } from "src/pages";
 import PrayerDetails from "src/pages/PrayerDetails";
 
 
@@ -16,9 +16,10 @@ export type RootStackParamList = {
   Terms: undefined;
   Profile: undefined;
   DayDetails: undefined;
-  Weeks: undefined;
+  WeekSelectionScreen: undefined;
   Album: undefined;
   PrayerDetails: undefined;
+  ResetPassword: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -43,9 +44,10 @@ export const Navigation = () => (
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="Profile" component={Profile} />
         <Stack.Screen name="DayDetails" component={DayDetails} />
-        <Stack.Screen name="Weeks" component={Weeks} />
+        <Stack.Screen name="WeekSelectionScreen" component={WeekSelectionScreen} />
         <Stack.Screen name="Album" component={Album} />
         <Stack.Screen name="PrayerDetails" component={PrayerDetails} />
+        <Stack.Screen name="ResetPassword" component={ForgotPasswordScreen} />
       </Stack.Navigator>
     </NavigationContainer>
 );
