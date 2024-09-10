@@ -1,12 +1,19 @@
 import React, { useState, useEffect, useContext } from "react";
-import { View, Text, StyleSheet, Image, FlatList, Dimensions } from "react-native";
-import Ionicons from '@expo/vector-icons/Ionicons';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  FlatList,
+  Dimensions,
+} from "react-native";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { AuthContext } from "src/context/auth";
 import { config } from "config";
 import { useNavigation } from "@react-navigation/native";
 import Divider from "src/components/Divider";
 
-const { width, height } = Dimensions.get('window');
+const { width, height } = Dimensions.get("window");
 
 interface ImageItem {
   id: string;
@@ -20,13 +27,16 @@ export const Album: React.FC = () => {
 
   const fetchImages = async () => {
     try {
-      const response = await fetch(`${config.API_URL}/pregnantWeek-all/${user?.metadata?.userId}`, {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${jwt}`,
-          'Content-Type': 'application/json',
+      const response = await fetch(
+        `${config.API_URL}/pregnantWeek-all/${user?.metadata?.userId}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${jwt}`,
+            "Content-Type": "application/json",
+          },
         },
-      });
+      );
       const data = await response.json();
       if (data && data.result) {
         // Mapeia os dados para o formato que precisamos para renderizar na FlatList
@@ -64,9 +74,7 @@ export const Album: React.FC = () => {
 
       <View style={{ alignItems: "center", justifyContent: "flex-start", flexDirection: "row", marginLeft: 30 }}>
         <Ionicons name="image" style={{ marginRight: 10 }} size={24} />
-        <Text style={styles.title}>
-          Álbum de fotos
-        </Text>
+        <Text style={styles.title}>Álbum de fotos</Text>
       </View>
       <Divider orientation="horizontal" width={width * 0.003} color="black" />
       { 
@@ -118,11 +126,11 @@ const styles = StyleSheet.create({
     flex: 1,
     margin: 5,
     borderRadius: 10,
-    overflow: 'hidden',
+    overflow: "hidden",
   },
   image: {
-    width: (width / 2) - 30,
-    height: (width / 2) - 30,
+    width: width / 2 - 30,
+    height: width / 2 - 30,
     borderRadius: 10,
   },
   withoutImages: {

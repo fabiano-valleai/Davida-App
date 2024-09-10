@@ -4,10 +4,18 @@ import {
   createNativeStackNavigator,
 } from "@react-navigation/native-stack";
 import React from "react";
-import { Home, Login, Signup, Terms, Profile, Album, DayDetails, WeekSelectionScreen, ForgotPasswordScreen } from "src/pages";
+import {
+  Home,
+  Login,
+  Signup,
+  Terms,
+  Profile,
+ 
+  Album,
+  DayDetails, WeekSelectionScreen, ForgotPasswordScreen,
+  CheckoutScreen,
+} from "src/pages";
 import PrayerDetails from "src/pages/PrayerDetails";
-
-
 
 export type RootStackParamList = {
   Login: undefined;
@@ -19,6 +27,7 @@ export type RootStackParamList = {
   WeekSelectionScreen: undefined;
   Album: undefined;
   PrayerDetails: undefined;
+  CheckoutScreen: undefined;
   ResetPassword: undefined;
 };
 
@@ -30,24 +39,26 @@ export type RootNavigation =
   | NativeStackNavigationProp<RootStackParamList, "Home", undefined>
   | NativeStackNavigationProp<RootStackParamList, "Terms", undefined>
   | NativeStackNavigationProp<RootStackParamList, "Profile", undefined>
-  | NativeStackNavigationProp<RootStackParamList, "PrayerDetails", undefined>;
+  | NativeStackNavigationProp<RootStackParamList, "PrayerDetails", undefined>
+  | NativeStackNavigationProp<RootStackParamList, "CheckoutScreen", undefined>;
 
 export const Navigation = () => (
-    <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName="Login"
-        screenOptions={{ headerShown: false, animation: "none" }}
-      >
-        <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="Signup" component={Signup} />
-        <Stack.Screen name="Terms" component={Terms} />
-        <Stack.Screen name="Home" component={Home} />
-        <Stack.Screen name="Profile" component={Profile} />
-        <Stack.Screen name="DayDetails" component={DayDetails} />
-        <Stack.Screen name="WeekSelectionScreen" component={WeekSelectionScreen} />
-        <Stack.Screen name="Album" component={Album} />
-        <Stack.Screen name="PrayerDetails" component={PrayerDetails} />
+  <NavigationContainer>
+    <Stack.Navigator
+      initialRouteName="Login"
+      screenOptions={{ headerShown: false, animation: "none" }}
+    >
+      <Stack.Screen name="Login" component={Login} />
+      <Stack.Screen name="Signup" component={Signup} />
+      <Stack.Screen name="Terms" component={Terms} />
+      <Stack.Screen name="Home" component={Home} />
+      <Stack.Screen name="Profile" component={Profile} />
+      <Stack.Screen name="DayDetails" component={DayDetails} />
+      <Stack.Screen name="WeekSelectionScreen" component={WeekSelectionScreen} />
+      <Stack.Screen name="Album" component={Album} />
+      <Stack.Screen name="PrayerDetails" component={PrayerDetails} />
         <Stack.Screen name="ResetPassword" component={ForgotPasswordScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
+      <Stack.Screen name="CheckoutScreen" component={CheckoutScreen} />
+    </Stack.Navigator>
+  </NavigationContainer>
 );

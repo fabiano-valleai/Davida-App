@@ -1,10 +1,19 @@
 import React, { useContext, useState } from "react";
-import { Image, Text, TextInput, View, StyleSheet, Dimensions, TouchableOpacity, Alert } from "react-native";
+import {
+  Image,
+  Text,
+  TextInput,
+  View,
+  StyleSheet,
+  Dimensions,
+  TouchableOpacity,
+  Alert,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import Ionicons from '@expo/vector-icons/Ionicons';
+import Ionicons from "@expo/vector-icons/Ionicons";
 import Snackbar from "src/components/Snackbar";
 import { AuthContext } from "src/context/auth";
-import * as ImagePicker from 'expo-image-picker'; // Import expo-image-picker
+import * as ImagePicker from "expo-image-picker"; // Import expo-image-picker
 import { config } from "config";
 
 const { width, height } = Dimensions.get("window");
@@ -21,19 +30,20 @@ export const Profile = () => {
 
 
   const getFirstName = (fullName: string): string => {
-    const nameParts = fullName.split(' ');
-    return nameParts.slice(0, 1).join(' ');
+    const nameParts = fullName.split(" ");
+    return nameParts.slice(0, 1).join(" ");
   };
 
   const pickImage = async () => {
-    let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    const permissionResult =
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
 
     if (permissionResult.granted === false) {
       Alert.alert("Permission to access camera roll is required!");
       return;
     }
 
-    let result = await ImagePicker.launchImageLibraryAsync({
+    const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [1, 1],
@@ -75,6 +85,7 @@ export const Profile = () => {
       if (response.status === 200) {
         setIsVisible(true);
         setSnackMsg("Perfil editado com sucesso!");
+        setSnackMsg("Perfil editado com sucesso!");
       } else {
         setIsVisible(true);
         setSnackMsg("Não foi possível editar seu perfil, favor verificar o preenchimento dos campos.");
@@ -89,61 +100,70 @@ export const Profile = () => {
 
 
   return (
-    <><View style={styles.mainContainer}>
-      <TouchableOpacity onPress={() => navigation.navigate("Home")} style={styles.backButton}>
-        <Ionicons name="arrow-back" size={24} color="black" />
-      </TouchableOpacity>
-
-      <View style={styles.profileInfo}>
-        <TouchableOpacity onPress={pickImage}>
-          <Image
-            source={profilePicture ? { uri: profilePicture } : { uri: "https://placehold.it/100x100" }}
-            style={styles.profileImage} />
+    <>
+      <View style={styles.mainContainer}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("Home")}
+          style={styles.backButton}
+        >
+          <Ionicons name="arrow-back" size={24} color="black" />
         </TouchableOpacity>
-        <Text style={styles.profileName}>{getFirstName(user.name)}</Text>
-        <Text style={styles.profileEmail}>{user.email}</Text>
+
+        <View style={styles.profileInfo}>
+          <TouchableOpacity onPress={pickImage}>
+            <Image
+              source={
+                profilePicture
+                  ? { uri: profilePicture }
+                  : { uri: "https://placehold.it/100x100" }
+              }
+              style={styles.profileImage}
+            />
+          </TouchableOpacity>
+          <Text style={styles.profileName}>{getFirstName(user.name)}</Text>
+          <Text style={styles.profileEmail}>{user.email}</Text>
+        </View>
+
+        <View style={styles.formContainer}>
+          <View style={styles.labelContainer}>
+            <Text style={styles.label}>Nome completo</Text>
+            <Text style={styles.required}>*</Text>
+          </View>
+          <TextInput style={styles.input} value={name} onChangeText={setName} />
+
+          <View style={styles.labelContainer}>
+            <Text style={styles.label}>Email</Text>
+            <Text style={styles.required}>*</Text>
+          </View>
+          <TextInput editable={false} style={styles.input} value={user.email} />
+
+          <View style={styles.labelContainer}>
+            <Text style={styles.label}>Nome do bebê</Text>
+          </View>
+          <TextInput
+            style={styles.input}
+            value={babyName}
+            onChangeText={setBabyName}
+          />
+
+          <View style={styles.labelContainer}>
+            <Text style={styles.label}>Nome do pai</Text>
+          </View>
+          <TextInput
+            style={styles.input}
+            value={fatherName}
+            onChangeText={setFatherName}
+          />
+
+          <TouchableOpacity
+            style={styles.saveButton}
+            onPress={submitEditProfile}
+          >
+            <Text style={styles.buttonText}>Salvar</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-
-      <View style={styles.formContainer}>
-        <View style={styles.labelContainer}>
-          <Text style={styles.label}>Nome completo</Text>
-          <Text style={styles.required}>*</Text>
-        </View>
-        <TextInput
-          style={styles.input}
-          value={name}
-          onChangeText={setName} />
-
-        <View style={styles.labelContainer}>
-          <Text style={styles.label}>Email</Text>
-          <Text style={styles.required}>*</Text>
-        </View>
-        <TextInput
-          editable={false}
-          style={styles.input}
-          value={user.email} />
-
-        <View style={styles.labelContainer}>
-          <Text style={styles.label}>Nome do bebê</Text>
-        </View>
-        <TextInput
-          style={styles.input}
-          value={babyName}
-          onChangeText={setBabyName} />
-
-        <View style={styles.labelContainer}>
-          <Text style={styles.label}>Nome do pai</Text>
-        </View>
-        <TextInput
-          style={styles.input}
-          value={fatherName}
-          onChangeText={setFatherName} />
-
-        <TouchableOpacity style={styles.saveButton} onPress={submitEditProfile}>
-          <Text style={styles.buttonText}>Salvar</Text>
-        </TouchableOpacity>
-      </View>
-    </View><Snackbar
+      <Snackbar
         message={snackMsg}
         setIsVisible={setIsVisible}
         isVisible={isVisible}
@@ -151,7 +171,9 @@ export const Profile = () => {
         position="bottom"
         backgroundColor="#CF6D6E"
         textColor="white"
-        actionTextColor="white" /></>
+        actionTextColor="white"
+      />
+    </>
   );
 };
 
@@ -228,4 +250,3 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
 });
-

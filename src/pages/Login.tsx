@@ -1,12 +1,18 @@
-import React, { useContext, useState,  } from "react";
+import React, { useContext, useState } from "react";
 import { TouchableOpacity } from "react-native";
-import { Image, Text, TextInput, View,  StyleSheet, Dimensions} from "react-native";
+import {
+  Image,
+  Text,
+  TextInput,
+  View,
+  StyleSheet,
+  Dimensions,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import Snackbar from 'src/components/Snackbar';
+import Snackbar from "src/components/Snackbar";
 import { AuthContext } from "src/context/auth";
 
 const { width, height } = Dimensions.get("window");
-
 
 export const Login = () => {
   const { submitLogin } = useContext(AuthContext);
@@ -15,11 +21,18 @@ export const Login = () => {
   const [isLoading, setLoading] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [snackMsg, setSnackMsg] = useState("");
-  
+
   const navigation = useNavigation<any>();
 
   const handleLogin = () => {
-    submitLogin(email, password, setLoading, setIsVisible, setSnackMsg, navigation.navigate);
+    submitLogin(
+      email,
+      password,
+      setLoading,
+      setIsVisible,
+      setSnackMsg,
+      navigation.navigate,
+    );
   };
 
   return (  
@@ -60,17 +73,16 @@ export const Login = () => {
         setIsVisible={setIsVisible}
         isVisible={isVisible}
         duration={3000}
-        position="bottom" 
+        position="bottom"
         backgroundColor="#CF6D6E"
         textColor="white"
         actionTextColor="white"
         containerStyle={{ marginHorizontal: 8 }}
-        messageStyle={{ }}
-        actionTextStyle={{ }}
+        messageStyle={{}}
+        actionTextStyle={{}}
       />
-      </View>
-      
-  )
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
@@ -104,7 +116,7 @@ const styles = StyleSheet.create({
   containerInputs: {
     marginTop: 30,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   loginBtn: {
     backgroundColor: "#CF6D6E",
@@ -114,7 +126,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   text: {
-    color: "#fff"
+    color: "#fff",
   },
   message2: {
     color: "#3C5F47",
@@ -126,6 +138,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
     width: width * 1.0,
     flexDirection: "row",
-    justifyContent: "space-around"
-  }
-})
+    justifyContent: "space-around",
+  },
+});

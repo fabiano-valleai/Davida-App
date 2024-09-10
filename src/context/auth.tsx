@@ -38,7 +38,7 @@ interface AuthContextProps {
     setLoading: React.Dispatch<React.SetStateAction<boolean>>,
     setIsVisible: React.Dispatch<React.SetStateAction<boolean>>,
     setSnackMsg: React.Dispatch<React.SetStateAction<string>>,
-    navigate: (screen: string) => void
+    navigate: (screen: string) => void,
   ) => Promise<void>;
   jwt: string | undefined;
   gestationData: GestationData;
@@ -55,7 +55,10 @@ interface AuthProviderProps {
   children: ReactNode;
 }
 
-const calcularDiaAtual = (dataCadastro: string, semanaCadastro: number | undefined): GestationData => {
+const calcularDiaAtual = (
+  dataCadastro: string,
+  semanaCadastro: number | undefined,
+): GestationData => {
   const dataInicial = new Date(dataCadastro);
   const dataAtual = new Date();
 
@@ -64,7 +67,10 @@ const calcularDiaAtual = (dataCadastro: string, semanaCadastro: number | undefin
   const inicioDiaAtual = new Date(dataAtual.setHours(0, 0, 0, 0));
 
   // Calcula a diferença em dias, ignorando o horário
-  const diffDays = Math.floor((inicioDiaAtual.getTime() - inicioDiaCadastro.getTime()) / (1000 * 60 * 60 * 24));
+  const diffDays = Math.floor(
+    (inicioDiaAtual.getTime() - inicioDiaCadastro.getTime()) /
+      (1000 * 60 * 60 * 24),
+  );
 
   // Determina a semana e o dia atual na semana
   const semanasCompletas = Math.floor(diffDays / 7);
@@ -79,28 +85,30 @@ const calcularDiaAtual = (dataCadastro: string, semanaCadastro: number | undefin
   };
 };
 
-
-
 const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [jwt, setJwt] = useState<string>();
-  const [gestationData, setGestationData] = useState<GestationData | null>(null);
+  const [gestationData, setGestationData] = useState<GestationData | null>(
+    null,
+  );
 
   useEffect(() => {
     if (user && user.metadata) {
-      const gestationInfo = calcularDiaAtual(user.metadata.createdAt, user.metadata.gestationPeriod);
+      const gestationInfo = calcularDiaAtual(
+        user.metadata.createdAt,
+        user.metadata.gestationPeriod,
+      );
       setGestationData(gestationInfo);
     }
   }, [user]);
-  
-  
+
   const submitLogin = async (
     email: string,
     password: string,
     setLoading: React.Dispatch<React.SetStateAction<boolean>>,
     setIsVisible: React.Dispatch<React.SetStateAction<boolean>>,
     setSnackMsg: React.Dispatch<React.SetStateAction<string>>,
-    navigate: (screen: string) => void
+    navigate: (screen: string) => void,
   ) => {
     setLoading(true);
     try {
@@ -122,11 +130,15 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         navigate("Home");
       } else {
         setIsVisible(true);
-        setSnackMsg("Não foi possível realizar o login, favor confira as credenciais fornecidas.");
+        setSnackMsg(
+          "Não foi possível realizar o login, favor confira as credenciais fornecidas.",
+        );
       }
     } catch (error) {
       setIsVisible(true);
-      setSnackMsg("Não foi possível realizar o login, favor confira as credenciais fornecidas.");
+      setSnackMsg(
+        "Não foi possível realizar o login, favor confira as credenciais fornecidas.",
+      );
     } finally {
       setLoading(false);
     }
