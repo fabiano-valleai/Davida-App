@@ -68,7 +68,6 @@ export const Signup = () => {
         confirmPassword,
         weekPregnancy: weekPregnancyNumber,
       });
-      Alert.alert(config.API_URL);
       const response = await fetch(`${config.API_URL}/user`, {
         method: "POST",
         body: JSON.stringify({
@@ -129,7 +128,7 @@ export const Signup = () => {
           <Text>Email</Text>
           <Text style={styles.required}>*</Text>
         </View>
-        <TextInput onChangeText={setEmail} value={email} style={styles.input} />
+        <TextInput onChangeText={setEmail} value={email.toLowerCase()} style={styles.input} />
         <View style={styles.containerLabel}>
           <Text>Em qual semana da gravidez você está?</Text>
           <Text style={styles.required}>*</Text>

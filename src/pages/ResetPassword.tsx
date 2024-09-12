@@ -76,7 +76,7 @@ const ForgotPasswordScreen = () => {
         isVisible={isVisible}
         duration={3000}
         position="bottom"
-        backgroundColor="#CF6D6E"
+        backgroundColor={ snackMsg === "E-mail de recuperação enviado com sucesso!" ? "green" : "#CF6D6E"}
         textColor="white"
         actionTextColor="white" />
     </View>

@@ -48,7 +48,7 @@ export const Login = () => {
           <TextInput
             style={styles.input}
             onChangeText={setEmail}
-            value={email}
+            value={email.toLowerCase()}
             placeholder="Email"
           />
           <TextInput
