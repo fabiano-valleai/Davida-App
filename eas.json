@@ -17,12 +17,18 @@
       "distribution": "store",
       "releaseChannel": "production",
       "env": {
-        "EXPO_PUBLIC_API_URL_ANDROID": "https://davida-backend.onrender.com",
-        "EXPO_PUBLIC_API_URL_IOS": "https://davida-backend.onrender.com"
+        "EXPO_PUBLIC_API_URL_ANDROID": "https://davida-backend-v5uu.onrender.com",
+        "EXPO_PUBLIC_API_URL_IOS": "https://davida-backend-v5uu.onrender.com"
       }
     }
   },
   "submit": {
-    "production": {}
+    "production": {
+      "ios": {
+        "appleId": "fabianovalleai@gmail.com",  
+        "ascAppId": "6686408244",  
+        "appleTeamId": "W9922WDB46"  
+      }
+    }
   }
 }
