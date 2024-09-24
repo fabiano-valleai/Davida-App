@@ -12,7 +12,6 @@
         "buildType": "app-bundle"
       },
       "ios": {
-
       },
       "distribution": "store",
       "releaseChannel": "production",

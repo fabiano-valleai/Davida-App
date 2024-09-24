@@ -2,9 +2,9 @@
   "expo": {
     "name": "Davida-App",
     "slug": "davida-app",
-    "version": "1.0.1",
+    "version": "1.1.2",
     "orientation": "portrait",
-    "icon": "",
+    "icon": "./assets/icons/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/icons/icon.png",
@@ -13,11 +13,17 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.fabianovalleai.DavidaApp"
+      "bundleIdentifier": "com.fabianovalleai.DavidaApp",
+      "infoPlist": {
+        "NSCameraUsageDescription": "This app uses the camera to allow users to take photos.",
+        "NSPhotoLibraryUsageDescription": "This app requires access to your photo library to upload images."
+      },
+      "buildNumber": "3"
     },
     "android": {
+      "versionCode": 2,
       "adaptiveIcon": {
-        "foregroundImage": "./assets/icon.png",
+        "foregroundImage": "./assets/icons/icon.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.fabianovalleai.DavidaApp",
@@ -28,7 +34,7 @@
       ]
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/icons/icon.png"
     },
     "plugins": [
       [
