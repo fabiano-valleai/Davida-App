@@ -8,6 +8,9 @@ import {
   Dimensions,
   TouchableOpacity,
   Alert,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
 } from "react-native";
 import { useNavigation as useReactNativeNavigation } from "@react-navigation/native";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -100,7 +103,11 @@ export const Signup = () => {
   };
 
   return (
-    <View style={styles.mainContainer}>
+    <KeyboardAvoidingView
+    behavior={Platform.OS === "ios" ? "padding" : "height"}
+    style={{ flex: 1 }}
+    >
+    <ScrollView style={styles.mainContainer}>
       <View style={styles.containerLogo}>
         <Image
           source={require("assets/logos/logoDavida.png")}
@@ -128,7 +135,11 @@ export const Signup = () => {
           <Text>Email</Text>
           <Text style={styles.required}>*</Text>
         </View>
-        <TextInput onChangeText={setEmail} value={email.toLowerCase()} style={styles.input} />
+        <TextInput 
+          onChangeText={setEmail} 
+          value={email.toLowerCase()} 
+          style={styles.input} 
+          />
         <View style={styles.containerLabel}>
           <Text>Em qual semana da gravidez você está?</Text>
           <Text style={styles.required}>*</Text>
@@ -187,7 +198,8 @@ export const Signup = () => {
         messageStyle={{}}
         actionTextStyle={{}}
       />
-    </View>
+    </ScrollView>
+  </KeyboardAvoidingView>
   );
 };
 
