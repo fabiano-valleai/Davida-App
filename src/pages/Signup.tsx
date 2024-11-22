@@ -18,6 +18,9 @@ import { config } from "config";
 import Snackbar from "src/components/Snackbar";
 import { z } from "zod";
 import Divider from "src/components/Divider";
+import Feather from '@expo/vector-icons/Feather';
+import AntDesign from '@expo/vector-icons/AntDesign';
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const { width, height } = Dimensions.get("window");
 
@@ -47,6 +50,16 @@ export const Signup = () => {
   const [snackMsg, setSnackMsg] = useState<string>("");
   const navigation = useReactNativeNavigation<any>();
   const [weekPregnancy, setWeekPregnancy] = useState<string>();
+  const [passwordVisible, setPasswordVisible] = useState<boolean>(false)
+  const [confirmPasswordVisible, setConfirmPasswordVisible] = useState<boolean>(false)
+  
+
+  const passwordIsVisible = () => {
+    setPasswordVisible(!passwordVisible);
+  }
+  const confirmPasswordIsVisible = () => {
+    setConfirmPasswordVisible(!confirmPasswordVisible);
+  }
 
   const submitSignup = async () => {
     try {
@@ -103,11 +116,11 @@ export const Signup = () => {
   };
 
   return (
-    <KeyboardAvoidingView
-    behavior={Platform.OS === "ios" ? "padding" : "height"}
-    style={{ flex: 1 }}
-    >
+    <SafeAreaView style={{ flex: 1, marginBottom: 30 }}>
     <ScrollView style={styles.mainContainer}>
+    <AntDesign name="arrowleft" size={24} color="black" style={{ marginLeft: 20 , marginTop: 30 }}
+     onPress={() => navigation.goBack()}
+    />
       <View style={styles.containerLogo}>
         <Image
           source={require("assets/logos/logoDavida.png")}
@@ -156,22 +169,42 @@ export const Signup = () => {
           <Text>Senha</Text>
           <Text style={styles.required}>*</Text>
         </View>
+        <View style={styles.containerPassword}>
         <TextInput
           onChangeText={setPassword}
           value={password}
           style={styles.input}
-          secureTextEntry={true}
+          secureTextEntry={!passwordVisible}
+          placeholder="Password"
         />
+          <Feather
+          name={passwordVisible ? "eye" : "eye-off"}
+          size={20}
+          color="black"
+          onPress={passwordIsVisible}
+          style={styles.icon}
+        />
+      </View>
+
         <View style={styles.containerLabel}>
           <Text>Confirme sua senha</Text>
           <Text style={styles.required}>*</Text>
         </View>
+        <View style={styles.containerPassword}>
         <TextInput
-          secureTextEntry={true}
+          secureTextEntry={!confirmPasswordVisible}
           onChangeText={setConfirmPassword}
           value={confirmPassword}
           style={styles.input}
         />
+           <Feather
+          name={confirmPasswordVisible ? "eye" : "eye-off"}
+          size={20}
+          color="black"
+          onPress={confirmPasswordIsVisible}
+          style={styles.icon}
+        />
+        </View>
         <View style={styles.termsContainer}>
           <Text style={styles.terms}>
             Ao registrar você concorda com os
@@ -199,7 +232,7 @@ export const Signup = () => {
         actionTextStyle={{}}
       />
     </ScrollView>
-  </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 };
 
@@ -224,6 +257,19 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     fontWeight: "bold"
   },
+  containerPassword: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    width: width * 0.8,
+    borderRadius: 5,
+  },
+  
+  icon: {
+    // position: "absolute",
+    right: 40,
+    marginBottom: 20
+  },
   input: {
     borderWidth: 0.1,
     borderColor: "black",
@@ -232,6 +278,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 8,
     fontSize: 14,
+
   },
   containerInputs: {
     marginTop: 40,

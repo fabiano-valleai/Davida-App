@@ -342,6 +342,7 @@ const styles = StyleSheet.create({
     width: width * 0.7,
     alignSelf: "flex-start",
     marginLeft: 20,
+    marginBottom: 10
   },
   iconView: {
     marginLeft: 20,

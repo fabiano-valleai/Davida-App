@@ -11,6 +11,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import Snackbar from "src/components/Snackbar";
 import { AuthContext } from "src/context/auth";
+import Feather from '@expo/vector-icons/Feather';
 
 const { width, height } = Dimensions.get("window");
 
@@ -21,6 +22,12 @@ export const Login = () => {
   const [isLoading, setLoading] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [snackMsg, setSnackMsg] = useState("");
+  const [passwordVisible, setPasswordVisible] = useState<boolean>(false)
+  
+
+  const passwordIsVisible = () => {
+    setPasswordVisible(!passwordVisible);
+  }
 
   const navigation = useNavigation<any>();
 
@@ -51,13 +58,22 @@ export const Login = () => {
             value={email.toLowerCase()}
             placeholder="Email"
           />
+          <View style={styles.containerPassword}>
           <TextInput
             style={styles.input}
             onChangeText={setPassword}
             value={password}
-            secureTextEntry={true}
+            secureTextEntry={!passwordVisible}
             placeholder="Senha"
           />
+          <Feather
+          name={passwordVisible ? "eye" : "eye-off"}
+          size={20}
+          color="black"
+          onPress={passwordIsVisible}
+          style={styles.icon}
+        />
+          </View>
           <TouchableOpacity activeOpacity={0.8} style={styles.loginBtn} onPress={handleLogin}>
             <View>
               <Text style={styles.text}>{ isLoading ? "Carregando..." : "Login"}</Text>
@@ -103,6 +119,18 @@ const styles = StyleSheet.create({
     color: "#3C5F47",
     fontSize: 16,
     textAlign: "center",
+  },
+  containerPassword: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    width: width * 0.8,
+    borderRadius: 5
+  },
+  icon: {
+    // position: "absolute",
+    right: 40,
+    marginBottom: 30
   },
   input: {
     borderWidth: 0.2,
