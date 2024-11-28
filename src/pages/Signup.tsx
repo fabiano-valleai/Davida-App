@@ -150,7 +150,7 @@ export const Signup = () => {
         </View>
         <TextInput 
           onChangeText={setEmail} 
-          value={email.toLowerCase()} 
+          value={email} 
           style={styles.input} 
           />
         <View style={styles.containerLabel}>

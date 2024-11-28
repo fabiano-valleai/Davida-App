@@ -1,11 +1,12 @@
 import React, { useContext, useState, useEffect, memo } from "react";
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Dimensions, Modal, Button, Alert, ImageBackground } from "react-native";
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Dimensions, Modal, Button, Alert, ImageBackground, Image } from "react-native";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useNavigation } from "@react-navigation/native";
 import { AuthContext } from "src/context/auth";
 import Divider from "src/components/Divider";
 import * as ImagePicker from 'expo-image-picker';
 import { config } from "config";
+import AntDesign from "@expo/vector-icons/AntDesign";
 
 const { width } = Dimensions.get('window');
 
@@ -57,14 +58,33 @@ const fetchBabyDescription = async (weekNumber : any , jwt : string, setBabyDesc
 const DayCircle = memo(({ day, currentDay, currentWeek, selectedWeek, onPress } : any )  => {
   // Ajuste de lógica para o dia atual e semanas futuras
   const isFutureDay = (selectedWeek > currentWeek) || (selectedWeek === currentWeek && day > currentDay);
+  const navigation = useNavigation()
+
+  const handlePress = () => {
+    if (isFutureDay) {
+      Alert.alert(
+        "Dia Futuro",
+        "Você não pode selecionar um dia no futuro. Caso esteja nesta semana de gestação, você pode atualizar a semana no seu perfil. Clique em 'Ir para o Perfil' para atualizar a semana.",
+        [
+          { 
+            text: "Ir para o Perfil", 
+            onPress: () => navigation.navigate('Profile')
+          },
+          { text: "OK" }
+        ] as { text: string, onPress: () => void }[]
+      );
+    } else {
+      onPress(day);
+    }
+  };
 
   return (
     <TouchableOpacity
       style={[
-         isFutureDay ? styles.dayCircleDisabled : styles.dayCircle,
+        isFutureDay ? styles.dayCircleDisabled : styles.dayCircle,
       ]}
-      onPress={() => onPress(day)}
-      disabled={isFutureDay}  // Desabilita dias futuros
+      onPress={handlePress}
+      // disabled={isFutureDay}  // Desabilita dias futuros
     >
       <Text style={styles.dayText}>{day}</Text>
     </TouchableOpacity>
@@ -83,7 +103,20 @@ const WeekItem = memo(({ week, isWeekPassed, selectedWeek, setSelectedWeek, hand
   const [weekPicture, setWeekPicture] = useState<string | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [babyDescription, setBabyDescription] = useState<string | null>(null); 
+  const [selectedImageUri, setSelectedImageUri] = useState<string | null>(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
+  
+  const openImageModal = (uri: string) => {
+    if (uri) {
+      setSelectedImageUri(uri);
+      setIsModalVisible(true);
+    } else {
+      Alert.alert("Erro", "Imagem não disponível");
+    }
+  };
+  
+  
   // Verifica se existe uma imagem para a semana
   const imageForThisWeek = images.find((img : any) => img.weekNumber === week);
 
@@ -148,31 +181,48 @@ const WeekItem = memo(({ week, isWeekPassed, selectedWeek, setSelectedWeek, hand
           <View style={styles.cardContainer}>
             <View style={styles.cardLeft}>
               <Text style={styles.prayerText}>Desenvolvimento do bebê na semana</Text>
-              <TouchableOpacity style={styles.moreButton} onPress={() => setModalVisible(true)}>
-                <Text style={styles.moreButtonText}>ver mais</Text>
+             <View style={styles.buttonModal}>
+             <TouchableOpacity style={styles.moreButton} onPress={() => setModalVisible(true)}>
+                <Text style={styles.moreButtonText}>Ver mais</Text>
               </TouchableOpacity>
+              <TouchableOpacity 
+              style={styles.buttonOpenModal} 
+              onPress={() => {
+                if (imageForThisWeek?.photoUrl) {
+                  openImageModal(imageForThisWeek.photoUrl);
+                } else {
+                  Alert.alert("Nenhuma imagem disponível", "Até o momento não foi adicionado imagem para essa semana");
+                }
+              }}
+            >
+              <Text style={styles.moreButtonText}>Ver imagem</Text>
+            </TouchableOpacity>
+             </View>
+
             </View>
 
             {imageForThisWeek ? (
+            <TouchableOpacity onPress={pickImage}>
               <ImageBackground source={{ uri: imageForThisWeek.photoUrl }} style={styles.imageBackground}>
                 <Ionicons name="camera-outline" size={24} color="#fff" />
-                <Text style={styles.addPhotoButtonText}>Foto da semana</Text>
+                <Text style={styles.addPhotoButtonText}>Alterar foto da semana</Text>
               </ImageBackground>
-            ) : (
-              <TouchableOpacity style={styles.addPhotoButton} onPress={pickImage}>
-                {weekPicture ? (
-                  <ImageBackground source={{ uri: weekPicture }} style={styles.imageBackground}>
-                    <Ionicons name="camera-outline" size={24} color="#fff" />
-                    <Text style={styles.addPhotoButtonText}>Alterar foto da semana</Text>
-                  </ImageBackground>
-                ) : (
-                  <>
-                    <Ionicons name="camera-outline" size={24} color="#fff" />
-                    <Text style={styles.addPhotoButtonText}>Adicionar foto da semana</Text>
-                  </>
-                )}
-              </TouchableOpacity>
-            )}
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity style={styles.addPhotoButton} onPress={pickImage}>
+              {weekPicture ? (
+                <ImageBackground source={{ uri: weekPicture }} style={styles.imageBackground}>
+                  <Ionicons name="camera-outline" size={24} color="#fff" />
+                  <Text style={styles.addPhotoButtonText}>Alterar foto da semana</Text>
+                </ImageBackground>
+              ) : (
+                <>
+                  <Ionicons name="camera-outline" size={24} color="#fff" />
+                  <Text style={styles.addPhotoButtonText}>Adicionar foto da semana</Text>
+                </>
+              )}
+            </TouchableOpacity>
+          )}
           </View>
 
           <Modal
@@ -191,6 +241,34 @@ const WeekItem = memo(({ week, isWeekPassed, selectedWeek, setSelectedWeek, hand
               </View>
             </View>
           </Modal>
+
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={isModalVisible}
+            onRequestClose={() => setIsModalVisible(false)}
+          >
+      <View style={styles.modalOverlayImage}>
+        <View style={styles.modalContentImage}>
+          <AntDesign
+            name="close"
+            size={30}
+            color="white"
+            onPress={() => setIsModalVisible(false)}
+            style={styles.closeIcon}
+          />
+          
+          {selectedImageUri && (
+            <Image
+              source={{ uri: selectedImageUri }}
+              style={styles.modalImage}
+              resizeMode="contain"
+            />
+          )}
+        </View>
+      </View>
+    </Modal>
+
         </View>
       )}
     </View>
@@ -201,14 +279,24 @@ export const WeekSelectionScreen = () => {
   const { gestationData, jwt, user } = useContext<any>(AuthContext);
   const navigation = useNavigation<any>();
   const [selectedWeek, setSelectedWeek] = useState<number | null>(null);
-  const currentWeek = gestationData.semanaCorrente;
+  // const currentWeek = gestationData.semanaCorrente;
+  const currentWeek = user.metadata.gestationPeriod;
   const currentDay = gestationData.diaCorrente;
   const [images, setImages] = useState([]);
+  const [statusUpdate, setStatusUpdate] = useState(false);
   const weeks = Array.from({ length: 40 }, (_, i) => i + 1);
+
+  // useEffect(() => {
+  //   fetchImages(user?.metadata?.userId, jwt, setImages);
+  // }, []);
 
   useEffect(() => {
     fetchImages(user?.metadata?.userId, jwt, setImages);
-  }, []);
+    if(statusUpdate) {
+      fetchImages(user?.metadata?.userId, jwt, setImages);
+      setStatusUpdate(false);
+    }
+  }, [statusUpdate, user?.metadata?.userId, jwt, fetchImages, setImages]);
 
   const isWeekPassed = (week: number) => {
     return week <= currentWeek;
@@ -245,9 +333,10 @@ export const WeekSelectionScreen = () => {
           'Authorization': `Bearer ${jwt}`
         }
       });
-  
+      setStatusUpdate(true)
       const data = await response.json();
-      console.log(data)
+      // console.log(data.update)
+      setStatusUpdate(false)
     } catch (error) {
       console.error("Error uploading image:", error);
     }
@@ -297,7 +386,8 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: "row",
     alignItems: "center",
-    marginVertical: 20
+    marginVertical: 20,
+    paddingVertical: 28
   },
   title: {
     fontSize: 24,
@@ -307,6 +397,9 @@ const styles = StyleSheet.create({
   },
   weekContainer: {
     marginBottom: 20,
+  },
+  buttonModal: {
+    flexDirection: "row",
   },
   weekDropdown: {
     flexDirection: "row",
@@ -341,7 +434,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: "#ECECEC",
     borderRadius: 10,
-    padding: 15,
+    padding: 10,
     marginTop: 10,
   },
   cardLeft: {
@@ -355,10 +448,19 @@ const styles = StyleSheet.create({
   moreButton: {
     backgroundColor: "#FFFFFF",
     paddingVertical: 5,
-    paddingHorizontal: 15,
+    paddingHorizontal: 12,
     borderRadius: 5,
     marginTop: 10,
     alignSelf: 'flex-start'
+  },
+  buttonOpenModal: {
+    backgroundColor: "#FFFFFF",
+    paddingVertical: 5,
+    paddingHorizontal: 12,
+    borderRadius: 5,
+    marginTop: 10,
+    marginLeft: 5,
+    alignSelf: 'flex-end'
   },
   moreButtonText: {
     color: "#000",
@@ -376,6 +478,36 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: "center",
     width: "80%",
+  },
+  modalOverlayImage: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)'
+  },
+  modalContentImage: {
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    borderRadius: 10,
+    padding: 10,
+  },
+  modalImage: {
+    width: '100%', 
+    height: '80%',
+    borderRadius: 10,
+  },
+  closeIcon: {
+    top: 20,
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    padding: 10,
+    borderRadius: 50,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.8,
+    shadowRadius: 3,
   },
   modalTitle: {
     fontSize: 18,

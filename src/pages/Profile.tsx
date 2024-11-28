@@ -8,6 +8,7 @@ import {
   Dimensions,
   TouchableOpacity,
   Alert,
+  ScrollView,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -26,6 +27,8 @@ export const Profile = () => {
   const [profilePicture, setProfilePicture] = useState<string | null>(user.profilePictureUrl ? user.profilePictureUrl : null);
   const [babyName, setBabyName] = useState<string>(user.metadata.babyName ? user.metadata.babyName : "" );
   const [fatherName, setFatherName] = useState<string>(user.metadata.fatherName ? user.metadata.fatherName : "");
+  const [currentWeek, setCurrentWeek] = useState<number>(user.metadata.gestationPeriod);
+  
   const navigation = useNavigation<any>();
 
 
@@ -33,7 +36,6 @@ export const Profile = () => {
     const nameParts = fullName.split(" ");
     return nameParts.slice(0, 1).join(" ");
   };
-
   const pickImage = async () => {
     const permissionResult =
       await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -54,6 +56,7 @@ export const Profile = () => {
       setProfilePicture(result.assets[0].uri);
     }
   }; 
+  console.log("User", user)
 
   const submitEditProfile = async () => {
     try {
@@ -62,35 +65,32 @@ export const Profile = () => {
       formData.append('fatherName', fatherName);
       formData.append('babyName', babyName);
       formData.append('userId', user.metadata.userId);
-      formData.append('gestationPeriod', gestationData.semanaCorrente);
-  
+      formData.append('gestationPeriod', currentWeek);
+    
       if (profilePicture) {
         formData.append('profilePicture', {
           uri: profilePicture,
           name: 'profile.jpg',
-          type: 'image/jpeg'
+          type: 'image/jpeg',
         });
       }
-  
       const response = await fetch(`${config.API_URL}/metadata`, {
         method: "PUT",
         body: formData,
         headers: {
-          'Authorization': `Bearer ${jwt}`
-        }
+          'Authorization': `Bearer ${jwt}`,
+        },
       });
-  
+    
       const data = await response.json();
-
+  
       if (response.status === 200) {
         setIsVisible(true);
-        setSnackMsg("Perfil editado com sucesso!");
         setSnackMsg("Perfil editado com sucesso!");
       } else {
         setIsVisible(true);
         setSnackMsg("Não foi possível editar seu perfil, favor verificar o preenchimento dos campos.");
       }
-  
     } catch (error) {
       setIsVisible(true);
       setSnackMsg("Não foi possível editar seu perfil, favor verificar o preenchimento dos campos.");
@@ -109,6 +109,7 @@ export const Profile = () => {
           <Ionicons name="arrow-back" size={24} color="black" />
         </TouchableOpacity>
 
+        <ScrollView>
         <View style={styles.profileInfo}>
           <TouchableOpacity onPress={pickImage}>
             <Image
@@ -138,6 +139,16 @@ export const Profile = () => {
           <TextInput editable={false} style={styles.input} value={user.email} />
 
           <View style={styles.labelContainer}>
+        <Text style={styles.label}>Período de gestação (semanas)</Text>
+          </View>
+          <TextInput
+            style={styles.input}
+            value={currentWeek.toString()}
+            onChangeText={(text) => setCurrentWeek(Number(text))}
+            keyboardType="numeric"
+          />
+
+          <View style={styles.labelContainer}>
             <Text style={styles.label}>Nome do bebê</Text>
           </View>
           <TextInput
@@ -162,6 +173,7 @@ export const Profile = () => {
             <Text style={styles.buttonText}>Salvar</Text>
           </TouchableOpacity>
         </View>
+        </ScrollView>
       </View>
       <Snackbar
         message={snackMsg}
@@ -182,10 +194,10 @@ const styles = StyleSheet.create({
   mainContainer: {
     backgroundColor: "white", // Same background color as the example image
     padding: 20,
-    height: height * 1.0
+    height: "100%"
   },
   backButton: {
-    marginBottom: 20,
+    paddingVertical: 20,
   },
   profileInfo: {
     alignItems: "center",

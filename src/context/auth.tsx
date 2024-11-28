@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect, ReactNode } from "react";
 import { config } from "config";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // Interfaces existentes
 interface Metadata {
@@ -109,6 +110,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setIsVisible: React.Dispatch<React.SetStateAction<boolean>>,
     setSnackMsg: React.Dispatch<React.SetStateAction<string>>,
     navigate: (screen: string) => void,
+    isChecked: boolean
   ) => {
     setLoading(true);
     try {
@@ -124,9 +126,17 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       });
 
       const data = await response.json();
-      if (response.status === 200) {
+
+      if(!isChecked) {
+        setIsVisible(true);
+        setSnackMsg(
+          "Você precisa aceitar os termos de uso do aplicativo",
+        );
+      }
+      else if (response.status === 200) {
         setUser(data.user);
         setJwt(data.jwt);
+        await AsyncStorage.setItem('jwt', data.jwt);
         navigate("Home");
       } else {
         setIsVisible(true);

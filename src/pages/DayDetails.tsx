@@ -123,6 +123,7 @@ export const DayDetails = () => {
         },
       });
       const data = await response.json();
+      console.log("Data", data)
       if (response.status === 200) {
         setSnackMsg("Salvo com sucesso!");
         setIsVisible(true);

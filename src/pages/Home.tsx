@@ -103,10 +103,10 @@ export const Home = () => {
 
       {isOpenMenu && (
         <View style={styles.menu}>
+          <View style={styles.contentMenu}>
           <TouchableOpacity onPress={() => setOpenMenu(false)}>
             <Ionicons name="close-circle" size={25} color="#3C5F47" />
           </TouchableOpacity>
-          <View style={styles.contentMenu}>
             <View style={{ alignItems: "center", marginTop: 40 }}>
               <TouchableOpacity
                 style={styles.menuItem}
@@ -149,7 +149,9 @@ export const Home = () => {
                 <Text style={styles.textMenu}>Album</Text>
               </TouchableOpacity>
             </View>
-            <View>
+            
+          </View>
+          <View style={styles.logoutContainer}>
               <TouchableOpacity
                 style={styles.menuLogout}
                 onPress={() => navigation.navigate("Login")}
@@ -158,7 +160,6 @@ export const Home = () => {
                 <Text style={styles.textMenu}>Sair</Text>
               </TouchableOpacity>
             </View>
-          </View>
         </View>
       )}
       <View style={styles.mainContent}>
@@ -234,9 +235,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    paddingTop: 20,
+    paddingTop: 24,
     backgroundColor: "#F5e7e7",
-    height: height * 0.1,
+    height: 100,
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
@@ -361,13 +362,14 @@ const styles = StyleSheet.create({
   },
   menu: {
     position: "absolute",
-    width: width * 0.5,
-    height: height,
+    // width: width * 0.6,
+    height: "100%",
     backgroundColor: "#fff",
     zIndex: 2,
-    padding: 20,
+    paddingHorizontal: 20,
     borderRightWidth: 1,
     borderRightColor: "#ccc",
+    justifyContent: "space-between",
   },
   mainContent: {
     flex: 1,
@@ -377,12 +379,15 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     marginTop: 20,
     alignItems: "center",
-    width: width * 0.4,
+    width: width * 0.5,
+  },
+  logoutContainer: {
+
   },
   menuLogout: {
     flexDirection: "row",
-    marginTop: 370,
-    alignItems: "center",
+    justifyContent: "flex-start",
+    marginBottom: 20
   },
   contentMenu: {
     marginTop: 30,

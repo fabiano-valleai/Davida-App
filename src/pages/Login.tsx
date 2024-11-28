@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { TouchableOpacity } from "react-native";
 import {
   Image,
@@ -12,6 +12,7 @@ import { useNavigation } from "@react-navigation/native";
 import Snackbar from "src/components/Snackbar";
 import { AuthContext } from "src/context/auth";
 import Feather from '@expo/vector-icons/Feather';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const { width, height } = Dimensions.get("window");
 
@@ -23,6 +24,7 @@ export const Login = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [snackMsg, setSnackMsg] = useState("");
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false)
+  const [isChecked, setIsChecked] = useState(false);
   
 
   const passwordIsVisible = () => {
@@ -30,6 +32,17 @@ export const Login = () => {
   }
 
   const navigation = useNavigation<any>();
+
+  // useEffect(() => {
+  //   const checkJwt = async () => {
+  //     const jwt = await AsyncStorage.getItem('jwt');
+  //     if (jwt) {
+  //       navigation.navigate('Home');
+  //     }
+  //   };
+    
+  //   checkJwt();
+  // }, [navigation]);
 
   const handleLogin = () => {
     submitLogin(
@@ -39,6 +52,7 @@ export const Login = () => {
       setIsVisible,
       setSnackMsg,
       navigation.navigate,
+      isChecked
     );
   };
 
@@ -55,7 +69,7 @@ export const Login = () => {
           <TextInput
             style={styles.input}
             onChangeText={setEmail}
-            value={email.toLowerCase()}
+            value={email}
             placeholder="Email"
           />
           <View style={styles.containerPassword}>
@@ -82,6 +96,26 @@ export const Login = () => {
           <View style={styles.hrefs}>
               <Text style={styles.message2}  onPress={ () => navigation.navigate("ResetPassword")}>Esqueceu sua senha?</Text>
               <Text style={styles.message3} onPress={ () => navigation.navigate("Signup")}>Cadastre-se</Text>
+          </View>
+
+          <View>
+          <View style={styles.termsContainer}>
+        <TouchableOpacity
+          style={[styles.checkBox, isChecked && styles.checked]}
+          onPress={() => setIsChecked(!isChecked)}
+        >
+          {isChecked && <Text style={styles.checkMark}>✓</Text>}
+        </TouchableOpacity>
+
+        <Text style={styles.terms}>
+          Você aceita nossos
+          <Text onPress={() => navigation.navigate('Terms')} style={styles.termsText}>
+            {' '}
+            Termos
+          </Text>{' '}
+          de uso do aplicativo?
+        </Text>
+      </View>
           </View>
         </View>
         <Snackbar
@@ -167,5 +201,35 @@ const styles = StyleSheet.create({
     width: width * 1.0,
     flexDirection: "row",
     justifyContent: "space-around",
+  },
+  termsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 16,
+  },
+  checkBox: {
+    width: 22,
+    height: 22,
+    borderWidth: 2,
+    borderColor: '#CCC',
+    borderRadius: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 8,
+  },
+  checked: {
+    backgroundColor: '#CF6D6E',
+  },
+  checkMark: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+  terms: {
+    fontSize: 14,
+  },
+  termsText: {
+    fontSize: 15,
+    fontWeight: "bold",
+    color: "#CF6D6E"
   },
 });
