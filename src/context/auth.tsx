@@ -145,6 +145,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         );
       }
     } catch (error) {
+      console.log("Error", error)
       setIsVisible(true);
       setSnackMsg(
         "Não foi possível realizar o login, favor confira as credenciais fornecidas.",

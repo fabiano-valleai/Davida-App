@@ -2,7 +2,7 @@
   "expo": {
     "name": "Davida-App",
     "slug": "davida-app",
-    "version": "1.1.4",
+    "version": "1.1.6",
     "orientation": "portrait",
     "icon": "./assets/icons/icon.png",
     "userInterfaceStyle": "light",
@@ -18,10 +18,10 @@
         "NSCameraUsageDescription": "This app uses the camera to allow users to take photos.",
         "NSPhotoLibraryUsageDescription": "This app requires access to your photo library to upload images."
       },
-      "buildNumber": "5"
+      "buildNumber": "7"
     },
     "android": {
-      "versionCode": 5,
+      "versionCode": 7,
       "adaptiveIcon": {
         "foregroundImage": "./assets/icons/icon.png",
         "backgroundColor": "#ffffff"
