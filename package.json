@@ -1,6 +1,6 @@
 {
-  "name": "davida-app",
-  "version": "1.1.6",
+  "name": "diario-davida",
+  "version": "2.0.0",
   "main": "App.tsx",
   "scripts": {
     "start": "expo start",

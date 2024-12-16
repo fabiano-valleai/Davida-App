@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "Davida-App",
-    "slug": "davida-app",
-    "version": "1.1.6",
+    "name": "Diario davida",
+    "slug": "diario-davida",
+    "version": "2.0.0",
     "orientation": "portrait",
     "icon": "./assets/icons/icon.png",
     "userInterfaceStyle": "light",
@@ -13,24 +13,26 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.fabianovalleai.DavidaApp",
+      "bundleIdentifier": "com.fabianovalleai.DavidaDiario",
       "infoPlist": {
         "NSCameraUsageDescription": "This app uses the camera to allow users to take photos.",
         "NSPhotoLibraryUsageDescription": "This app requires access to your photo library to upload images."
       },
-      "buildNumber": "7"
+      "buildNumber": "15"
     },
     "android": {
-      "versionCode": 7,
+      "versionCode": 15,
       "adaptiveIcon": {
         "foregroundImage": "./assets/icons/icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.fabianovalleai.DavidaApp",
+      "package": "com.fabianovalleai.DavidaDiario",
       "permissions": [
         "android.permission.CAMERA",
         "android.permission.READ_EXTERNAL_STORAGE",
-        "android.permission.WRITE_EXTERNAL_STORAGE"
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.MODIFY_AUDIO_SETTINGS"
       ]
     },
     "web": {
@@ -59,7 +61,7 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "62060efc-e319-414f-b766-0478d2ad47b5"
+        "projectId": "d43c47ab-d32f-4044-83e1-018f85777f60"
       }
     },
     "owner": "fabianovalleai"

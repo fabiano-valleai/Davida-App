@@ -11,28 +11,28 @@ export const Terms = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Termos de Uso do Aplicativo DAVIDA</Text>
+      <Text style={styles.title}>Termos de Uso do AplicativoDiario davida</Text>
       <ScrollView style={styles.scrollContainer}>
         <Text style={styles.content}>
           Última atualização: 04/09/2024{"\n"}
-          Bem-vindo ao aplicativo DAVIDA, desenvolvido e operado pelo Instituto Moura de Moura. 
-          Ao utilizar o aplicativo DAVIDA, você concorda com os termos e condições descritos abaixo. 
+          Bem-vindo ao aplicativoDiario davida, desenvolvido e operado pelo Instituto Moura de Moura. 
+          Ao utilizar o aplicativoDiario davida, você concorda com os termos e condições descritos abaixo. 
           Leia atentamente antes de prosseguir.
         </Text>
         <Text style={styles.content}>
           {"\n"}1. Aceitação dos Termos{"\n"}
-          Ao acessar e utilizar o aplicativo DAVIDA, você concorda em cumprir e estar legalmente vinculado a estes Termos de Uso, 
+          Ao acessar e utilizar o aplicativoDiario davida, você concorda em cumprir e estar legalmente vinculado a estes Termos de Uso, 
           bem como a nossa Política de Privacidade. Se você não concordar com qualquer parte destes termos, não utilize o aplicativo.
         </Text>
         <Text style={styles.content}>
           {"\n"}2. Natureza Espiritual do Conteúdo{"\n"}
-          O DAVIDA oferece um manual de orações diárias e consagração a Nossa Senhora para mulheres gestantes. O conteúdo disponibilizado 
+          ODiario davida oferece um manual de orações diárias e consagração a Nossa Senhora para mulheres gestantes. O conteúdo disponibilizado 
           tem natureza exclusivamente espiritual e não substitui, em nenhuma circunstância, o acompanhamento, orientação ou cuidados 
           fornecidos por profissionais da saúde legalmente habilitados.
         </Text>
         <Text style={styles.content}>
           {"\n"}3. Isenção de Responsabilidade Médica{"\n"}
-          O conteúdo do aplicativo DAVIDA, incluindo, mas não se limitando a orações, consagrações e reflexões, não é de caráter científico 
+          O conteúdo do aplicativoDiario davida, incluindo, mas não se limitando a orações, consagrações e reflexões, não é de caráter científico 
           ou médico. O aplicativo não se destina a diagnosticar, tratar, curar, informar ou prevenir qualquer condição médica. A gestação 
           deve ser acompanhada por profissionais de saúde qualificados, e o uso do aplicativo não dispensa a consulta a esses profissionais.
         </Text>
@@ -43,7 +43,7 @@ export const Terms = () => {
         </Text>
         <Text style={styles.content}>
           {"\n"}5. Período Gratuito e Assinatura{"\n"}
-          O DAVIDA oferece um período gratuito de uso, após o qual o acesso ao aplicativo continuará mediante pagamento de uma assinatura. 
+          ODiario davida oferece um período gratuito de uso, após o qual o acesso ao aplicativo continuará mediante pagamento de uma assinatura. 
           Os detalhes da assinatura, incluindo preço e duração, serão apresentados durante o processo de inscrição. Todas as taxas são 
           não reembolsáveis, exceto conforme exigido por lei.
         </Text>
@@ -55,7 +55,7 @@ export const Terms = () => {
         </Text>
         <Text style={styles.content}>
           {"\n"}7. Uso Indevido{"\n"}
-          Você concorda em não usar o aplicativo DAVIDA para qualquer finalidade que seja ilegal ou proibida por estes Termos de Uso. 
+          Você concorda em não usar o aplicativoDiario davida para qualquer finalidade que seja ilegal ou proibida por estes Termos de Uso. 
           Qualquer uso não autorizado pode resultar na suspensão ou término de sua conta.
         </Text>
         <Text style={styles.content}>
