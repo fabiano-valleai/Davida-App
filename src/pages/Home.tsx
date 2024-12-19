@@ -122,7 +122,7 @@ export const Home = () => {
                 <Text style={styles.textMenu}>Semana</Text>
               </TouchableOpacity>
             </View>
-            <View style={{ alignItems: "center" }}>
+            {/* <View style={{ alignItems: "center" }}>
               <TouchableOpacity
                 style={styles.menuItem}
                 onPress={() => navigation.navigate("CheckoutScreen")}
@@ -130,7 +130,7 @@ export const Home = () => {
                 <Ionicons name="cart" size={25} color="#3C5F47" />
                 <Text style={styles.textMenu}>Pagamento</Text>
               </TouchableOpacity>
-            </View>
+            </View> */}
             <View style={{ alignItems: "center" }}>
               <TouchableOpacity
                 style={styles.menuItem}
