@@ -2,7 +2,7 @@
   "expo": {
     "name": "Diario davida",
     "slug": "diario-davida",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "orientation": "portrait",
     "icon": "./assets/icons/icon.png",
     "userInterfaceStyle": "light",
@@ -18,10 +18,10 @@
         "NSCameraUsageDescription": "This app uses the camera to allow users to take photos.",
         "NSPhotoLibraryUsageDescription": "This app requires access to your photo library to upload images."
       },
-      "buildNumber": "15"
+      "buildNumber": "16"
     },
     "android": {
-      "versionCode": 15,
+      "versionCode": 16,
       "adaptiveIcon": {
         "foregroundImage": "./assets/icons/icon.png",
         "backgroundColor": "#ffffff"
