@@ -251,7 +251,7 @@ const styles = StyleSheet.create({
     width: width * 1.0,
   },
   message: {
-    color: "#3C5F47",
+    color: "#000",
     fontSize: 20,
     textAlign: "center",
     marginLeft: 10,
@@ -286,7 +286,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   loginBtn: {
-    backgroundColor: "#CF6D6E",
+    backgroundColor: "#5ecde0",
     width: width * 0.8,
     borderRadius: 12,
     padding: 12,
@@ -325,7 +325,7 @@ const styles = StyleSheet.create({
   termsText: {
     fontSize: 14,
     fontWeight: "bold",
-    color: "#CF6D6E"
+    color: "#9e9e9e"
   },
   terms: {
     fontSize: 14,

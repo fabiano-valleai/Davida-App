@@ -16,6 +16,8 @@ import Snackbar from "src/components/Snackbar";
 import { AuthContext } from "src/context/auth";
 import * as ImagePicker from "expo-image-picker"; // Import expo-image-picker
 import { config } from "config";
+import axios from "axios"
+import Feather from "@expo/vector-icons/Feather";
 
 const { width, height } = Dimensions.get("window");
 
@@ -28,6 +30,7 @@ export const Profile = () => {
   const [babyName, setBabyName] = useState<string>(user.metadata.babyName ? user.metadata.babyName : "" );
   const [fatherName, setFatherName] = useState<string>(user.metadata.fatherName ? user.metadata.fatherName : "");
   const [currentWeek, setCurrentWeek] = useState<number>(user.metadata.gestationPeriod);
+
   
   const navigation = useNavigation<any>();
 
@@ -56,7 +59,6 @@ export const Profile = () => {
       setProfilePicture(result.assets[0].uri);
     }
   }; 
-  console.log("User", user)
 
   const submitEditProfile = async () => {
     try {
@@ -95,6 +97,41 @@ export const Profile = () => {
       setIsVisible(true);
       setSnackMsg("Não foi possível editar seu perfil, favor verificar o preenchimento dos campos.");
     }
+  };
+
+  const deleteUser = () => {
+    const authConfig = {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+    }
+    axios.delete(`${config.API_URL}/user/${user.metadata.userId}`, authConfig)
+      .then((res) => {
+        console.log("Sucesso", res.data);
+        navigation.navigate("Login");
+      })
+      .catch((error) => {
+        console.log("Erro ao deletar", error.response);
+      });
+  };
+
+  const confirmDelete = () => {
+    Alert.alert(
+      "Confirmar Exclusão",
+      "Tem certeza de que deseja deletar sua conta?",
+      [
+        {
+          text: "Cancelar",
+          onPress: () => console.log("Cancelado"),
+          style: "cancel",
+        },
+        {
+          text: "OK",
+          onPress: deleteUser,
+        },
+      ],
+      { cancelable: true }
+    );
   };
   
 
@@ -136,7 +173,7 @@ export const Profile = () => {
             <Text style={styles.label}>Email</Text>
             <Text style={styles.required}>*</Text>
           </View>
-          <TextInput editable={false} style={styles.input} value={user.email} />
+          <TextInput editable={false} value={user.email} style={styles.input} />
 
           <View style={styles.labelContainer}>
         <Text style={styles.label}>Período de gestação (semanas)</Text>
@@ -171,6 +208,11 @@ export const Profile = () => {
             onPress={submitEditProfile}
           >
             <Text style={styles.buttonText}>Salvar</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={confirmDelete} style={styles.deleteUser}>
+          <Feather name="delete" size={24} color="black" />
+          <Text style={styles.textDeleteUser}>Deletar Conta</Text>
           </TouchableOpacity>
         </View>
         </ScrollView>
@@ -250,7 +292,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   saveButton: {
-    backgroundColor: "#CF6D6E",
+    backgroundColor: "#5ecde0",
     width: width * 0.8,
     borderRadius: 12,
     padding: 12,
@@ -261,4 +303,22 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
   },
+  deleteUser: {
+    width: "100%",
+    backgroundColor: "#e0e0e0",
+    borderRadius: 12,
+    padding: 12,
+    marginTop: 20,
+    marginBottom: 20,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between"
+  },
+  textDeleteUser: {
+    color: "#000",
+    fontSize: 12,
+    fontWeight: "bold",
+    marginLeft: 8,
+    textTransform: "uppercase"
+  }
 });

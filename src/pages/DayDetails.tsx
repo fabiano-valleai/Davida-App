@@ -180,7 +180,7 @@ useEffect(() => {
         <Ionicons
           name="arrow-back"
           size={30}
-          color="#3C5F47"
+          color="#9e9e9e"
           onPress={() => navigation.goBack()} 
         />
         <Image
@@ -188,7 +188,7 @@ useEffect(() => {
           style={styles.logoDavida}
           resizeMode="contain"
         />
-        <Ionicons name="person" size={24} color="#3C5F47" onPress={() => navigation.navigate("Profile")} />
+        <Ionicons name="person" size={24} color="#9e9e9e" onPress={() => navigation.navigate("Profile")} />
       </View>
 
       <View style={styles.sectionContainer}>
@@ -256,7 +256,7 @@ const styles = StyleSheet.create({
   },
   header: {
     paddingTop: 20,
-    backgroundColor: "#F5E7E7",
+    backgroundColor: "#e0e0e0",
     height: height * 0.12,
     flexDirection: "row",
     justifyContent: "space-around",
@@ -265,9 +265,11 @@ const styles = StyleSheet.create({
   },
   logoDavida: {
     width: width * 0.3,
+    height: 60,
+    marginTop: 15
   },
   verseContainer: {
-    backgroundColor: "#FCE2DB",
+    backgroundColor: "#e0e0e0",
     padding: 15,
     borderRadius: 15,
     alignItems: "center",
@@ -283,7 +285,7 @@ const styles = StyleSheet.create({
   verseTitle: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#3C5F47",
+    color: "#000",
     marginBottom: 10,
     marginLeft: 10
   },
@@ -313,7 +315,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#CF6C6E",
+    color: "#000",
     marginLeft: 20,
     marginBottom: 10,
     width: width * 0.85,
@@ -343,7 +345,7 @@ const styles = StyleSheet.create({
     color: "#fff",
     textAlign: "center",
     marginBottom: 5,
-    backgroundColor: "#CF6C6E",
+    backgroundColor: "#5ecde0",
     padding: 10,
     alignSelf: "center",
     borderRadius: 15,
@@ -365,14 +367,14 @@ const styles = StyleSheet.create({
     height: height * 0.15,
     textAlignVertical: "top",
     backgroundColor: "#fff",
-    borderColor: "#CF6C6E",
+    borderColor: "#5ecde0",
     borderWidth: 1,
     borderRadius: 15,
     alignSelf: "center",
     width: width * 0.85
   },
   saveButton: {
-    backgroundColor: "#CF6C6E",
+    backgroundColor: "#5ecde0",
     padding: 10,
     borderRadius: 15,
     flexDirection: "row",
@@ -409,7 +411,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     fontSize: 16,
     fontWeight: "bold",
-    color: "#CF6C6E",
+    color: "#000",
   }
 });
 

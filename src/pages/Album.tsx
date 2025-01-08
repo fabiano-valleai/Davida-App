@@ -208,8 +208,7 @@ const styles = StyleSheet.create({
   logoDavida: {
     width: width * 0.4,
     alignSelf: "center",
-    height: height * 0.1,
-    marginBottom: 40,
+    height: height * 0.2
   },
   title: {
     fontSize: 20,

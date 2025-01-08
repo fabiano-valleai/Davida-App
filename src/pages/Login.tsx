@@ -63,7 +63,7 @@ export const Login = () => {
               style={styles.logoDavida}
               resizeMode="contain"
               />
-        <Text style={ styles.message}>"Um milagre de Deus acontecendo em você."</Text>
+        {/* <Text style={ styles.message}>"Um milagre de Deus acontecendo em você."</Text> */}
         </View>
         <View style={styles.containerInputs}>
           <TextInput
@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   loginBtn: {
-    backgroundColor: "#CF6D6E",
+    backgroundColor: "#5ecde0",
     width: width * 0.8,
     borderRadius: 12,
     padding: 12,
@@ -191,10 +191,10 @@ const styles = StyleSheet.create({
     color: "#fff",
   },
   message2: {
-    color: "#3C5F47",
+    color: "#000",
   },
   message3: {
-    color: "#3C5F47",
+    color: "#000",
   },
   hrefs: {
     marginTop: 10,
@@ -218,7 +218,7 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   checked: {
-    backgroundColor: '#CF6D6E',
+    backgroundColor: '#5ecde0',
   },
   checkMark: {
     color: '#fff',
@@ -230,6 +230,6 @@ const styles = StyleSheet.create({
   termsText: {
     fontSize: 15,
     fontWeight: "bold",
-    color: "#CF6D6E"
+    color: "#9e9e9e"
   },
 });

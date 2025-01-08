@@ -72,7 +72,7 @@ export const Home = () => {
           <Ionicons
             name={isOpenMenu ? "close-circle" : "menu-sharp"} // Mudar ícone conforme estado do menu
             size={30}
-            color="#3C5F47"
+            color="#9e9e9e"
             onPress={() => setOpenMenu(!isOpenMenu)} // Alternar o menu e ícone
           />
         </View>
@@ -86,7 +86,7 @@ export const Home = () => {
           <Ionicons
             name="person"
             size={24}
-            color="#3C5F47"
+            color="#9e9e9e"
             onPress={() => navigation.navigate("Profile")}
           />
         </View>
@@ -105,20 +105,20 @@ export const Home = () => {
         <View style={styles.menu}>
           <View style={styles.contentMenu}>
           <TouchableOpacity onPress={() => setOpenMenu(false)}>
-            <Ionicons name="close-circle" size={25} color="#3C5F47" />
+            <Ionicons name="close-circle" size={25} color="#9e9e9e" />
           </TouchableOpacity>
             <View style={{ alignItems: "center", marginTop: 40 }}>
               <TouchableOpacity
                 style={styles.menuItem}
                 onPress={navigateToDayDetails}
               >
-                <Ionicons name="calendar-number" size={25} color="#3C5F47" />
+                <Ionicons name="calendar-number" size={25} color="#9e9e9e" />
                 <Text style={styles.textMenu}>Dia</Text>
               </TouchableOpacity>
             </View>
             <View style={{ alignItems: "center", marginTop: 10 }}>
               <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate("WeekSelectionScreen")}>
-                <Ionicons name="today" size={25} color="#3C5F47" />
+                <Ionicons name="today" size={25} color="#9e9e9e" />
                 <Text style={styles.textMenu}>Semana</Text>
               </TouchableOpacity>
             </View>
@@ -127,7 +127,7 @@ export const Home = () => {
                 style={styles.menuItem}
                 onPress={() => navigation.navigate("CheckoutScreen")}
               >
-                <Ionicons name="cart" size={25} color="#3C5F47" />
+                <Ionicons name="cart" size={25} color="#9e9e9e" />
                 <Text style={styles.textMenu}>Pagamento</Text>
               </TouchableOpacity>
             </View> */}
@@ -136,7 +136,7 @@ export const Home = () => {
                 style={styles.menuItem}
                 onPress={() => navigation.navigate("Profile")}
               >
-                <Ionicons name="person" size={25} color="#3C5F47" />
+                <Ionicons name="person" size={25} color="#9e9e9e" />
                 <Text style={styles.textMenu}>Perfil</Text>
               </TouchableOpacity>
             </View>
@@ -145,7 +145,7 @@ export const Home = () => {
                 style={styles.menuItem}
                 onPress={() => navigation.navigate("Album")}
               >
-                <Ionicons name="albums" size={25} color="#3C5F47" />
+                <Ionicons name="albums" size={25} color="#9e9e9e" />
                 <Text style={styles.textMenu}>Album</Text>
               </TouchableOpacity>
             </View>
@@ -156,7 +156,7 @@ export const Home = () => {
                 style={styles.menuLogout}
                 onPress={() => navigation.navigate("Login")}
               >
-                <Ionicons name="log-out" size={25} color="#3C5F47" />
+                <Ionicons name="log-out" size={25} color="#9e9e9e" />
                 <Text style={styles.textMenu}>Sair</Text>
               </TouchableOpacity>
             </View>
@@ -182,19 +182,19 @@ export const Home = () => {
           <View style={styles.containerIcons}>
             <TouchableOpacity onPress={navigateToDayDetails}>
               <Text style={{ fontSize: 16, marginBottom: 10 }}>Dia</Text>
-              <Ionicons name="calendar-number" size={30} color="#3C5F47" />
+              <Ionicons name="calendar-number" size={30} color="#9e9e9e" />
             </TouchableOpacity>
           </View>
           <View style={styles.containerIcons}>
             <TouchableOpacity style={styles.touchableNavigation} onPress={() => navigation.navigate("WeekSelectionScreen")}>
               <Text style={{fontSize: 16, marginBottom: 10}}>Semanas</Text>
-              <Ionicons name="today" size={30} color="#3C5F47" />
+              <Ionicons name="today" size={30} color="#9e9e9e" />
             </TouchableOpacity>
           </View>
           <TouchableOpacity onPress={() => navigation.navigate("Album")}>
             <View style={styles.containerIcons}>
               <Text style={{ fontSize: 16, marginBottom: 10 }}>Album</Text>
-              <Ionicons name="albums" size={30} color="#3C5F47" />
+              <Ionicons name="albums" size={30} color="#9e9e9e" />
             </View>
           </TouchableOpacity>
         </View>
@@ -213,7 +213,7 @@ export const Home = () => {
                         style={styles.iconView}
                         name="eye-sharp"
                         size={25}
-                        color="#3C5F47"
+                        color="#9e9e9e"
                       />
                     </View>
                   </TouchableOpacity>
@@ -236,7 +236,7 @@ const styles = StyleSheet.create({
   },
   header: {
     paddingTop: 24,
-    backgroundColor: "#F5e7e7",
+    backgroundColor: "#e0e0e0",
     height: 100,
     flexDirection: "row",
     justifyContent: "space-around",
@@ -247,17 +247,18 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   userName: {
-    color: "#CF6C6E",
+    color: "#9e9e9e",
     marginLeft: 5,
     fontSize: 18,
   },
   welcomeText: {
-    color: "#3C5F47",
+    color: "#000",
     fontSize: 18,
   },
   logoDavida: {
     width: width * 0.5,
     alignSelf: "center",
+    height: 120
   },
   containerLogo: {
     height: height * 0.2,

@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect, memo } from "react";
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Dimensions, Modal, Button, Alert, ImageBackground, Image } from "react-native";
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Dimensions, Modal, Button, Alert, ImageBackground, Image, Linking } from "react-native";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useNavigation } from "@react-navigation/native";
 import { AuthContext } from "src/context/auth";
@@ -119,25 +119,50 @@ const WeekItem = memo(({ week, isWeekPassed, selectedWeek, setSelectedWeek, hand
   
   // Verifica se existe uma imagem para a semana
   const imageForThisWeek = images.find((img : any) => img.weekNumber === week);
-
   const pickImage = async () => {
-    let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    try {
 
-    if (permissionResult.granted === false) {
-      Alert.alert("Permission to access camera roll is required!");
-      return;
-    }
-
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [1, 1],
-      quality: 1,
-    });
-
-    if (!result.canceled) {
-      setWeekPicture(result.assets[0].uri);
-      await submitWeekPhoto(result.assets[0].uri);  // Faz o POST da foto automaticamente
+      let { status } = await ImagePicker.getMediaLibraryPermissionsAsync();
+      
+      if (status !== "granted") {
+        const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+  
+        if (!permissionResult.granted) {
+          return Alert.alert(
+            "Permissão necessária",
+            "Você precisa habilitar o acesso à galeria nas configurações do dispositivo.",
+            [
+              { text: "Cancelar", style: "cancel" },
+              {
+                text: "Abrir Configurações",
+                onPress: () => Linking.openSettings(),
+              },
+            ]
+          );
+        }
+      }
+  
+      // Abrir a galeria para selecionar uma imagem
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 1,
+      });
+  
+      // Verificar se o usuário não cancelou a seleção
+      if (!result.canceled && result.assets && result.assets.length > 0) {
+        const imageUri = result.assets[0].uri;
+  
+        // Atualizar o estado com a imagem selecionada
+        setWeekPicture(imageUri);
+  
+        // Enviar a imagem selecionada
+        await submitWeekPhoto(imageUri);
+      }
+    } catch (error) {
+      console.error("Erro ao selecionar a imagem:", error);
+      Alert.alert("Ocorreu um erro ao selecionar a imagem. Tente novamente.");
     }
   };
 
@@ -406,15 +431,15 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     padding: 15,
     borderRadius: 10,
-    backgroundColor: "#f0f0f0",
+    backgroundColor: "#e0e0e0",
     alignItems: "center"
   },
   weekPassedTitle: {
-    backgroundColor: "#CEF2D4",
+    backgroundColor: "#5ecde0",
   },
   weekText: {
     fontSize: 18,
-    color: "#3C5F47"
+    color: "white"
   },
   daysContainer: {
     flexDirection: "row",
@@ -537,7 +562,7 @@ const styles = StyleSheet.create({
     addPhotoButton: {
       width: 120,
       height: 80,
-      backgroundColor: "#CF6C6E",
+      backgroundColor: "#c4ffc9",
       justifyContent: 'center',
       alignItems: 'center',
       borderRadius: 10,

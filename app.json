@@ -2,7 +2,7 @@
   "expo": {
     "name": "Diario davida",
     "slug": "diario-davida",
-    "version": "2.0.1",
+    "version": "2.0.4",
     "orientation": "portrait",
     "icon": "./assets/icons/icon.png",
     "userInterfaceStyle": "light",
@@ -16,12 +16,13 @@
       "bundleIdentifier": "com.fabianovalleai.DavidaDiario",
       "infoPlist": {
         "NSCameraUsageDescription": "This app uses the camera to allow users to take photos.",
-        "NSPhotoLibraryUsageDescription": "This app requires access to your photo library to upload images."
+        "NSPhotoLibraryUsageDescription": "We need access to your photo library so you can select photos to display in the app's gallery. For example, you can choose an image to share your pregnancy journey or update your profile."
+
       },
-      "buildNumber": "16"
+      "buildNumber": "19"
     },
     "android": {
-      "versionCode": 16,
+      "versionCode": 19,
       "adaptiveIcon": {
         "foregroundImage": "./assets/icons/icon.png",
         "backgroundColor": "#ffffff"
