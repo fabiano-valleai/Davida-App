@@ -63,6 +63,7 @@ export const DayDetails = () => {
       // Encontre o dia correto dentro da semana
       const dayDetails = data[0]?.days.find((day: any) => day.dayNumber === selectedDay);
       
+      console.log('Data', data)
       if (dayDetails) {
         setDayInfo(dayDetails);  // Atualiza as informações do dia
       } else {

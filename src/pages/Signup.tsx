@@ -62,6 +62,7 @@ export const Signup = () => {
   }
 
   const submitSignup = async () => {
+    console.log("Chamando")
     try {
       // Verifica se weekPregnancy está definido e não é vazio antes de tentar converter
       const weekPregnancyNumber =
@@ -99,12 +100,20 @@ export const Signup = () => {
 
       const data = await response.json();
 
+      if (data.errorCode === "EMAIL_IN_USE") {
+        setSnackMsg("Email já foi cadastrado");
+        setIsVisible(true);
+        return;
+      }
+      
+
       if (response.status === 200) {
         setIsVisible(true);
         setSnackMsg("Cadastro efetuado com sucesso!");
         navigation.navigate("Login");
       }
     } catch (error) {
+      console.log("Error", error)
       if (error instanceof z.ZodError) {
         const firstError = error.errors[0];
         setIsVisible(true);
@@ -127,11 +136,11 @@ export const Signup = () => {
           style={styles.logoDavida}
           resizeMode="contain"
         />
-        <View style={styles.headerText}>
+        {/* <View style={styles.headerText}>
           <Ionicons name="person-add" size={20} color="black" />
           <Text style={styles.message}>Cadastro</Text>
         </View>
-        <Divider orientation="horizontal" width={width * 0.001} color="black"></Divider>
+        <Divider orientation="horizontal" width={width * 0.001} color="black"></Divider> */}
       </View>
       <View style={styles.containerInputs}>
         <View style={styles.containerLabel}>

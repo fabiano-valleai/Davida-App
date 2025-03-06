@@ -439,7 +439,7 @@ const styles = StyleSheet.create({
   },
   weekText: {
     fontSize: 18,
-    color: "white"
+    color: "#000"
   },
   daysContainer: {
     flexDirection: "row",
